@@ -1,0 +1,18 @@
+# PropellerAds API Encyclopedia Requirements
+
+# Core dependencies
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# Optional dependencies for advanced features
+anthropic>=0.25.0  # For AI consultations
+pyyaml>=6.0        # For YAML config files
+
+# Development dependencies (optional)
+pytest>=7.0.0      # For testing
+black>=23.0.0      # For code formatting
+flake8>=6.0.0      # For linting
+
+# Data analysis (optional)
+pandas>=2.0.0      # For data analysis
+matplotlib>=3.7.0  # For charts and graphs
