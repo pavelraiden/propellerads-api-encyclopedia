@@ -15,15 +15,32 @@ from tenacity import (
     before_sleep_log
 )
 
-from ..models.campaign import CampaignCreate, CampaignUpdate, CampaignBulkAction
-from ..models.statistics import StatisticsRequest
-from ..exceptions import (
-    PropellerAdsError,
-    create_error_from_response,
-    AuthenticationError,
-    ServerError,
-    TimeoutError
-)
+# Виправлені імпорти
+try:
+    from ..models.campaign import CampaignCreate, CampaignUpdate, CampaignBulkAction
+    from ..models.statistics import StatisticsRequest
+    from ..exceptions import (
+        PropellerAdsError,
+        create_error_from_response,
+        AuthenticationError,
+        ServerError,
+        TimeoutError
+    )
+except ImportError:
+    # Fallback для прямого запуску
+    import sys
+    import os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+    
+    from models.campaign import CampaignCreate, CampaignUpdate, CampaignBulkAction
+    from models.statistics import StatisticsRequest
+    from exceptions import (
+        PropellerAdsError,
+        create_error_from_response,
+        AuthenticationError,
+        ServerError,
+        TimeoutError
+    )
 
 # Налаштування логування
 logger = logging.getLogger(__name__)
