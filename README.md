@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PropellerAds API Encyclopedia 🚀
 
 **Production-ready PropellerAds API v5 client optimized for AI agents**
@@ -216,9 +217,49 @@ result = client.create_campaign(
     name="Test Campaign",
     budget=100.0,
     targeting={'countries': ['US'], 'os': ['android']}
+=======
+# PropellerAds Python SDK
+
+Professional Python client for PropellerAds SSP API v5.
+
+## Features
+
+- ✅ **Production Ready** - Enterprise-grade reliability
+- ✅ **Intelligent Retry** - Exponential backoff with circuit breaker
+- ✅ **Rate Limiting** - Token bucket algorithm with burst support
+- ✅ **Type Safety** - Full Pydantic model validation
+- ✅ **Async Support** - Both sync and async clients
+- ✅ **Comprehensive Logging** - Request tracking and monitoring
+- ✅ **Error Handling** - Detailed exception hierarchy
+
+## Quick Start
+
+```python
+from propellerads import PropellerAdsClient
+
+# Initialize client
+client = PropellerAdsClient(api_key="your-api-key")
+
+# Get account balance
+balance = client.get_balance()
+print(f"Balance: {balance.formatted}")
+
+# Get campaigns
+campaigns = client.get_campaigns(limit=10)
+for campaign in campaigns:
+    print(f"Campaign: {campaign.name} (Status: {campaign.status})")
+
+# Get statistics
+stats = client.get_statistics(
+    date_from="2024-01-01",
+    date_to="2024-01-31",
+    group_by=["campaign_id"]
+>>>>>>> 5117d9ff16db6c2a648506b86a369f5fbe65acaa
 )
+print(f"Total clicks: {stats.total_clicks}")
 ```
 
+<<<<<<< HEAD
 ### AI Interface Usage
 ```python
 from src.ai_interface import PropellerAdsAIInterface
@@ -349,3 +390,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Ready for production use by AI agents and human developers alike! 🚀**
+=======
+## Installation
+
+```bash
+pip install propellerads-python
+```
+
+## Documentation
+
+- [API Reference](docs/api_reference.md)
+- [Examples](docs/examples.md)
+
+## Requirements
+
+- Python 3.8+
+- requests
+- pydantic
+
+## License
+
+MIT License
+>>>>>>> 5117d9ff16db6c2a648506b86a369f5fbe65acaa
