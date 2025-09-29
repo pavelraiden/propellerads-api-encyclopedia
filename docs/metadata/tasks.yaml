@@ -1,0 +1,50 @@
+tasks:
+  budget_management:
+    complexity: high
+    dependencies:
+    - campaign_access
+    - budget_permissions
+    description: Monitor and adjust campaign budgets
+    estimated_time: 60-120 seconds
+    name: Manage Budgets
+    optional_params:
+    - notification_settings
+    required_params:
+    - adjustment_rules
+    success_criteria:
+    - budgets_updated
+    - alerts_sent
+  campaign_creation:
+    complexity: medium
+    dependencies:
+    - valid_api_key
+    - sufficient_balance
+    description: Create a new advertising campaign
+    estimated_time: 30-60 seconds
+    name: Create Campaign
+    optional_params:
+    - creative
+    - schedule
+    - optimization
+    required_params:
+    - name
+    - budget
+    - targeting
+    success_criteria:
+    - 'status_code: 200'
+    - 'campaign_id: present'
+  campaign_monitoring:
+    complexity: low
+    dependencies:
+    - active_campaigns
+    description: Monitor campaign performance and health
+    estimated_time: 10-30 seconds
+    name: Monitor Campaigns
+    optional_params:
+    - campaign_ids
+    - metrics
+    required_params:
+    - time_range
+    success_criteria:
+    - data_retrieved
+    - analysis_complete

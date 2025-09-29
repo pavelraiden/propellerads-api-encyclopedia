@@ -17,9 +17,9 @@ from tenacity import (
 
 # Виправлені імпорти
 try:
-    from ..models.campaign import CampaignCreate, CampaignUpdate, CampaignBulkAction
-    from ..models.statistics import StatisticsRequest
-    from ..exceptions import (
+    from models.campaign import CampaignCreate, CampaignUpdate, CampaignBulkAction
+    from models.statistics import StatisticsRequest
+    from exceptions import (
         PropellerAdsError,
         create_error_from_response,
         AuthenticationError,

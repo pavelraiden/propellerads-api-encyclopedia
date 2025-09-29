@@ -1,0 +1,35 @@
+api_dependencies:
+  campaign_creation:
+    affects:
+    - campaign_list
+    - budget_allocation
+    depends_on:
+    - targeting_options
+    - account_balance
+    triggers:
+    - moderation_review
+    - billing_update
+  campaign_monitoring:
+    affects:
+    - performance_reports
+    - optimization_recommendations
+    depends_on:
+    - campaign_list
+    - statistics_api
+    triggers:
+    - alert_notifications
+    - auto_optimization
+data_flow:
+  campaign_lifecycle:
+  - draft
+  - pending_moderation
+  - active
+  - paused
+  - completed
+  - rejected
+  required_sequence:
+  - authenticate
+  - validate_inputs
+  - create_campaign
+  - monitor_status
+  - optimize_performance

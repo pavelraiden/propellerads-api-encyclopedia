@@ -1,7 +1,7 @@
 """Statistics data models with validation"""
 
 from typing import List, Optional, Dict, Any, Union
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from datetime import datetime, date
 
 
@@ -17,7 +17,8 @@ class StatisticsRequest(BaseModel):
     order_by: str = Field(default="spent", description="Sort field")
     order_dest: str = Field(default="desc", description="Sort direction")
 
-    @validator('day_from', 'day_to')
+    @field_validator('day_from', 'day_to')
+    @classmethod
     def validate_datetime_format(cls, v):
         """Validate datetime format"""
         try:
@@ -26,15 +27,19 @@ class StatisticsRequest(BaseModel):
         except ValueError:
             raise ValueError('Date must be in YYYY-MM-DD HH:MM:SS format')
 
-    @validator('tz')
+    @field_validator('tz')
+    @classmethod
     def validate_timezone(cls, v):
+    
         """Validate timezone format"""
         if not v.startswith(('+', '-')) or len(v) != 5:
             raise ValueError('Timezone must be in format +HHMM or -HHMM')
         return v
 
-    @validator('group_by')
+    @field_validator('group_by')
+    @classmethod
     def validate_group_by(cls, v):
+    
         """Validate grouping fields"""
         valid_fields = [
             'campaign_id', 'zone_id', 'country_id', 'date_time', 'hour',
@@ -45,16 +50,20 @@ class StatisticsRequest(BaseModel):
                 raise ValueError(f'Invalid group_by field: {field}. Valid fields: {valid_fields}')
         return v
 
-    @validator('order_by')
+    @field_validator('order_by')
+    @classmethod
     def validate_order_by(cls, v):
+    
         """Validate sort field"""
         valid_fields = ['impressions', 'clicks', 'conversions', 'spent', 'payout', 'ctr', 'cr', 'cpa']
         if v not in valid_fields:
             raise ValueError(f'Invalid order_by field: {v}. Valid fields: {valid_fields}')
         return v
 
-    @validator('order_dest')
+    @field_validator('order_dest')
+    @classmethod
     def validate_order_direction(cls, v):
+    
         """Validate sort direction"""
         if v not in ['asc', 'desc']:
             raise ValueError('order_dest must be "asc" or "desc"')
@@ -92,15 +101,19 @@ class StatisticsRecord(BaseModel):
     cpa: Optional[float] = Field(None, ge=0, description="Cost per acquisition")
     roi: Optional[float] = Field(None, description="Return on investment %")
 
-    @validator('ctr', 'cr', 'roi', pre=True)
+    @field_validator
+    @classmethod
     def round_percentages(cls, v):
+    
         """Round percentage values"""
         if v is not None:
             return round(float(v), 2)
         return v
 
-    @validator('spent', 'payout', 'cpa', pre=True)
+    @field_validator
+    @classmethod
     def round_money(cls, v):
+    
         """Round monetary values"""
         if v is not None:
             return round(float(v), 3)
@@ -139,13 +152,17 @@ class PerformanceSummary(BaseModel):
     avg_cpc: float = Field(default=0.0, ge=0, description="Average cost per click")
     avg_cpa: float = Field(default=0.0, ge=0, description="Average cost per acquisition")
 
-    @validator('roi', 'avg_ctr', 'avg_cr', pre=True)
+    @field_validator
+    @classmethod
     def round_percentages(cls, v):
+    
         """Round percentage values"""
         return round(float(v), 2)
 
-    @validator('spent', 'revenue', 'profit', 'avg_cpc', 'avg_cpa', pre=True)
+    @field_validator
+    @classmethod
     def round_money(cls, v):
+    
         """Round monetary values"""
         return round(float(v), 3)
 
@@ -185,18 +202,24 @@ class ZonePerformance(BaseModel):
     efficiency_score: float = Field(default=0.0, ge=0, le=100, description="Zone efficiency score")
     recommendation: str = Field(default="MONITOR", description="Optimization recommendation")
 
-    @validator('ctr', 'cr', 'roi', 'efficiency_score', pre=True)
+    @field_validator
+    @classmethod
     def round_percentages(cls, v):
+    
         """Round percentage values"""
         return round(float(v), 2)
 
-    @validator('spent', 'revenue', 'cpa', pre=True)
+    @field_validator
+    @classmethod
     def round_money(cls, v):
+    
         """Round monetary values"""
         return round(float(v), 3)
 
-    @validator('recommendation')
+    @field_validator('recommendation')
+    @classmethod
     def validate_recommendation(cls, v):
+    
         """Validate recommendation values"""
         valid_recommendations = [
             'WHITELIST', 'BLACKLIST', 'OPTIMIZE', 'MONITOR', 'TESTING'
@@ -237,13 +260,17 @@ class HourlyPerformance(BaseModel):
     efficiency_score: float = Field(default=0.0, ge=0, le=100)
     recommendation: str = Field(default="NORMAL")
 
-    @validator('ctr', 'cr', 'efficiency_score', pre=True)
+    @field_validator
+    @classmethod
     def round_percentages(cls, v):
+    
         """Round percentage values"""
         return round(float(v), 2)
 
-    @validator('spent', pre=True)
+    @field_validator
+    @classmethod
     def round_money(cls, v):
+    
         """Round monetary values"""
         return round(float(v), 3)
 

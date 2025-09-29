@@ -1,7 +1,7 @@
 """Campaign data models with enhanced validation"""
 
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
 
 
@@ -10,7 +10,8 @@ class Rate(BaseModel):
     countries: List[str] = Field(..., min_items=1, description="List of country codes")
     amount: float = Field(..., gt=0, description="Rate amount in USD")
 
-    @validator('countries')
+    @field_validator('countries')
+    @classmethod
     def validate_countries(cls, v):
         """Validate country codes"""
         if not v:
@@ -28,7 +29,8 @@ class Targeting(BaseModel):
     connection_type: Optional[Dict[str, Any]] = None
     device_type: Optional[Dict[str, Any]] = None
 
-    @validator('country')
+    @field_validator('country')
+    @classmethod
     def validate_country_targeting(cls, v):
         """Validate country targeting structure"""
         if not isinstance(v, dict):
@@ -66,7 +68,8 @@ class CampaignCreate(BaseModel):
     rates: List[Rate] = Field(..., min_items=1, description="Country-specific rates")
     creatives: Optional[List[Dict[str, Any]]] = Field(None, description="Initial creatives")
 
-    @validator('target_url')
+    @field_validator('target_url')
+    @classmethod
     def validate_cpa_url(cls, v, values):
         """Validate URL for CPA campaigns"""
         rate_model = values.get('rate_model', '')
@@ -74,7 +77,8 @@ class CampaignCreate(BaseModel):
             raise ValueError(f'{rate_model} campaigns must include ${{SUBID}} macro in target URL')
         return v
 
-    @validator('started_at', 'expired_at')
+    @field_validator('started_at', 'expired_at')
+    @classmethod
     def validate_date_format(cls, v):
         """Validate date format"""
         if v is None:
@@ -85,7 +89,8 @@ class CampaignCreate(BaseModel):
         except ValueError:
             raise ValueError('Date must be in dd/MM/YYYY format')
 
-    @validator('rates')
+    @field_validator('rates')
+    @classmethod
     def validate_rates_countries_match_targeting(cls, v, values):
         """Validate that rates countries match targeting"""
         targeting = values.get('targeting')
@@ -180,7 +185,8 @@ class CampaignBulkAction(BaseModel):
     """Model for bulk campaign actions"""
     campaign_ids: List[int] = Field(..., min_items=1, description="List of campaign IDs")
     
-    @validator('campaign_ids')
+    @field_validator('campaign_ids')
+    @classmethod
     def validate_campaign_ids(cls, v):
         """Validate campaign IDs"""
         if not v:

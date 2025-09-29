@@ -33,13 +33,13 @@ class TestPropellerAdsUltimateClient:
         """Тест успішного отримання балансу"""
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.text = '"1732.91"'
+        mock_response.text = '"1686.48"'
         mock_get.return_value = mock_response
         
         result = self.client.get_balance()
         
         assert result['success'] is True
-        assert result['data'] == '1732.91'
+        assert result['data'] == '1686.48'
         assert result['status_code'] == 200
     
     @patch('requests.Session.get')
@@ -117,7 +117,7 @@ class TestAsyncClient:
         with patch('aiohttp.ClientSession.get') as mock_get:
             mock_response = AsyncMock()
             mock_response.status = 200
-            mock_response.text = AsyncMock(return_value='"1732.91"')
+            mock_response.text = AsyncMock(return_value='"1686.48"')
             mock_get.return_value.__aenter__.return_value = mock_response
             
             async with PropellerAdsAsyncClient() as client:
@@ -125,7 +125,7 @@ class TestAsyncClient:
                 
                 assert result['success'] is True
                 # Async клієнт повертає float, не string
-                assert result['balance'] == 1732.91
+                assert result['balance'] == 1686.48
                 assert isinstance(result['balance'], float)
 
 
