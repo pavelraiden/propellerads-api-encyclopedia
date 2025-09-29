@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "propellerads-enterprise": {
+      "command": "python",
+      "args": [
+        "/home/ubuntu/propellerads-api-encyclopedia/src/mcp_server.py"
+      ],
+      "env": {
+        "MainAPI": "your_propellerads_api_token_here"
+      }
+    }
+  }
+}
