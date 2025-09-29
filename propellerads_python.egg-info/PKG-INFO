@@ -1,3 +1,33 @@
+Metadata-Version: 2.4
+Name: propellerads-python
+Version: 1.0.0
+Summary: Professional PropellerAds SSP API v5 Python Client
+Author-email: PropellerAds Team <api@propellerads.com>
+License: MIT
+Project-URL: Homepage, https://github.com/pavelraiden/propellerads-api-encyclopedia
+Project-URL: Documentation, https://github.com/pavelraiden/propellerads-api-encyclopedia/docs
+Project-URL: Repository, https://github.com/pavelraiden/propellerads-api-encyclopedia
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.28.0
+Requires-Dist: pydantic>=1.9.0
+Requires-Dist: urllib3>=1.26.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.1.0; extra == "dev"
+Requires-Dist: pytest-cov>=3.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.18.0; extra == "dev"
+Requires-Dist: black>=22.3.0; extra == "dev"
+Requires-Dist: mypy>=0.950; extra == "dev"
+Requires-Dist: flake8>=4.0.0; extra == "dev"
+
 # PropellerAds Python SDK
 
 Professional Python client for PropellerAds SSP API v5.
