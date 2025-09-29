@@ -15,6 +15,9 @@ pyyaml>=6.0        # For YAML config files
 
 # Development dependencies (optional)
 pytest>=7.0.0      # For testing
+pytest-asyncio>=0.21.0  # For async tests
+pytest-mock>=3.10.0     # For mocking
+pytest-cov>=4.0.0       # For coverage
 black>=23.0.0      # For code formatting
 flake8>=6.0.0      # For linting
 
