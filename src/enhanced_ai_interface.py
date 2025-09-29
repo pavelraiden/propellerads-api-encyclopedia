@@ -21,7 +21,7 @@ from dataclasses import dataclass
 
 sys.path.append(str(Path(__file__).parent.parent))
 from propellerads.client import PropellerAdsClient as PropellerAdsUltimateClient
-from ai_interface import PropellerAdsAIInterface
+from src.ai_interface import PropellerAdsAIInterface
 
 logger = logging.getLogger(__name__)
 

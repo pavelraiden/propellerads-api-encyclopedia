@@ -6,9 +6,9 @@ Enhanced Client Demo - Simplified Version
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
-from propellerads_client import PropellerAdsUltimateClient
+from propellerads.client import PropellerAdsClient as PropellerAdsUltimateClient
 
 def enhanced_demo():
     """Демонстрация расширенных возможностей"""
