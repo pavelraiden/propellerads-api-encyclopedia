@@ -8,7 +8,7 @@ from .campaign import Campaign, CampaignTargeting, CampaignRates, CampaignAudien
 from .creative import Creative, CampaignCreative
 from .balance import Balance
 from .statistics import Statistics, StatisticsFilters
-from .collections import Country, OS, OSVersion, Browser, UserActivity
+from .collections import Country, OS, OSVersion, Browser, UserActivityLevel
 from .enums import *
 
 __all__ = [
@@ -26,5 +26,5 @@ __all__ = [
     'OS',
     'OSVersion',
     'Browser',
-    'UserActivity',
+    'UserActivityLevel',
 ]
