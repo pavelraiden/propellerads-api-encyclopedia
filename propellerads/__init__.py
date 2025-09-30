@@ -4,6 +4,15 @@ PropellerAds Python SDK
 Professional PropellerAds SSP API v5 client with enterprise features.
 """
 
+import sys
+
+# Check Python version compatibility
+if sys.version_info < (3, 11):
+    raise RuntimeError(
+        "PropellerAds SDK requires Python 3.11 or higher. "
+        f"Current version: {sys.version_info.major}.{sys.version_info.minor}"
+    )
+
 __version__ = "2.0.0"
 __author__ = "PropellerAds Team"
 __email__ = "support@propellerads.com"
@@ -14,9 +23,12 @@ from .client import PropellerAdsClient as LegacyPropellerAdsClient, BalanceRespo
 # Try to import enhanced client, fallback to legacy if not available
 try:
     from .client_enhanced import EnhancedPropellerAdsClient
+    from .async_client import AsyncPropellerAdsClient
     PropellerAdsClient = EnhancedPropellerAdsClient
+    _async_available = True
 except ImportError:
     PropellerAdsClient = LegacyPropellerAdsClient
+    _async_available = False
 
 # Import exceptions
 from .exceptions import (
@@ -71,3 +83,7 @@ if _enhanced_available:
         'RateModel',
         'CampaignStatus',
     ])
+
+# Add async client if available
+if _async_available:
+    __all__.append('AsyncPropellerAdsClient')

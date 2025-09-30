@@ -19,7 +19,23 @@ class PropellerAdsAIInterface:
         self.constraints = self._load_constraints()
     
     def process_natural_language_command(self, command: str, confirm_write_operations: bool = True) -> Dict[str, Any]:
-        """Process natural language commands"""
+        """
+        Process natural language commands and execute corresponding API operations.
+        
+        Args:
+            command (str): Natural language command to process
+            confirm_write_operations (bool): Whether to confirm write operations before execution
+            
+        Returns:
+            Dict[str, Any]: Response containing action, result, and natural language summary
+            
+        Examples:
+            >>> ai.process_natural_language_command("show my balance")
+            {'action': 'get_balance', 'result': ..., 'natural_language_summary': '💰 Your account balance is $1598.21'}
+            
+            >>> ai.process_natural_language_command("list campaigns")
+            {'action': 'list_campaigns', 'result': [...], 'natural_language_summary': '📊 Found 2 campaigns'}
+        """
         try:
             command_lower = command.lower().strip()
             
