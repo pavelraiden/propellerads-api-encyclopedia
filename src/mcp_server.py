@@ -439,15 +439,15 @@ class PropellerAdsMCPServer:
     async def _handle_get_balance(self) -> Dict[str, Any]:
         """Handle balance request"""
         try:
-            balance = self.client.balance.get_balance()
+            balance = self.client.get_balance()
             return {
-                "balance": balance.formatted if hasattr(balance, 'formatted') else str(balance),
-                "raw_amount": balance.amount if hasattr(balance, 'amount') else balance,
+                "status": "success",
+                "balance": float(balance.amount) if hasattr(balance, 'amount') else float(balance),
                 "currency": "USD",
                 "timestamp": datetime.now().isoformat()
             }
         except Exception as e:
-            return {"error": str(e)}
+            return {"status": "error", "error": str(e)}
     
     async def _handle_health_check(self) -> Dict[str, Any]:
         """Handle health check"""
@@ -459,7 +459,7 @@ class PropellerAdsMCPServer:
                 "timestamp": str(asyncio.get_event_loop().time())
             }
         except Exception as e:
-            return {"error": str(e)}
+            return {"status": "error", "error": str(e)}
     
     async def _handle_list_campaigns(self, status: str = "all", limit: int = 100) -> Dict[str, Any]:
         """Handle campaigns list request"""
