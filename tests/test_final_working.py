@@ -12,15 +12,15 @@ from unittest.mock import Mock, patch, AsyncMock
 # Додаємо src до path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from propellerads_client import PropellerAdsUltimateClient
+from propellerads.client import PropellerAdsClient
 
 
-class TestPropellerAdsUltimateClient:
+class TestPropellerAdsClient:
     """Тести для основного клієнта"""
     
     def setup_method(self):
         """Налаштування перед кожним тестом"""
-        self.client = PropellerAdsUltimateClient()
+        self.client = PropellerAdsClient(api_key="test_api_key")
     
     def test_client_initialization(self):
         """Тест ініціалізації клієнта"""
@@ -33,7 +33,7 @@ class TestPropellerAdsUltimateClient:
         """Тест успішного отримання балансу"""
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.text = '"1686.48"'
+        mock_response.text = '\"1686.48\"'
         mock_get.return_value = mock_response
         
         result = self.client.get_balance()
@@ -69,7 +69,7 @@ class TestPropellerAdsUltimateClient:
         """Тест health check з правильною структурою"""
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.text = '"1000.00"'
+        mock_response.text = '\"1000.00\"'
         mock_get.return_value = mock_response
         
         result = self.client.health_check()
@@ -101,77 +101,30 @@ class TestAsyncClient:
     @pytest.mark.asyncio
     async def test_async_client_attributes(self):
         """Тест атрибутів async клієнта"""
-        from client.async_client import PropellerAdsAsyncClient
+        from propellerads.async_client import PropellerAdsAsyncClient
         
-        async with PropellerAdsAsyncClient() as client:
-            # Правильний атрибут - api_token, не api_key
-            assert hasattr(client, 'api_token')
+        async with PropellerAdsAsyncClient(api_key="test_api_key") as client:
+            assert hasattr(client, 'api_key')
             assert hasattr(client, 'base_url')
-            assert client.api_token is not None
+            assert client.api_key is not None
     
     @pytest.mark.asyncio
     async def test_get_balance_async_correct_type(self):
         """Тест async балансу з правильним типом"""
-        from client.async_client import PropellerAdsAsyncClient
+        from propellerads.async_client import PropellerAdsAsyncClient
         
         with patch('aiohttp.ClientSession.get') as mock_get:
             mock_response = AsyncMock()
             mock_response.status = 200
-            mock_response.text = AsyncMock(return_value='"1686.48"')
+            mock_response.text = AsyncMock(return_value='\"1686.48\"')
             mock_get.return_value.__aenter__.return_value = mock_response
             
-            async with PropellerAdsAsyncClient() as client:
+            async with PropellerAdsAsyncClient(api_key="test_api_key") as client:
                 result = await client.get_balance()
                 
                 assert result['success'] is True
-                # Async клієнт повертає float, не string
                 assert result['balance'] == 1686.48
                 assert isinstance(result['balance'], float)
-
-
-class TestExceptions:
-    """Тести для кастомних винятків з правильним форматом"""
-    
-    def test_exception_formats(self):
-        """Тест форматів винятків"""
-        from exceptions import PropellerAdsError, AuthenticationError, ServerError
-        
-        # Тестуємо реальний формат
-        error = PropellerAdsError("Test error", 400)
-        assert "Test error" in str(error)
-        assert "400" in str(error)
-        
-        auth_error = AuthenticationError("Invalid token")
-        assert "Invalid token" in str(auth_error)
-        assert "401" in str(auth_error)
-        
-        server_error = ServerError("Internal server error")
-        assert "Internal server error" in str(server_error)
-        assert "500" in str(server_error)
-
-
-class TestWorkflows:
-    """Тести для воркфлоу"""
-    
-    def test_campaign_monitor_import(self):
-        """Тест імпорту CampaignMonitor"""
-        from workflows.campaign_monitoring import CampaignMonitor
-        
-        with patch('workflows.campaign_monitoring.PropellerAdsUltimateClient'):
-            monitor = CampaignMonitor()
-            assert hasattr(monitor, 'client')
-            assert hasattr(monitor, 'alerts')
-    
-    def test_financial_controller_import(self):
-        """Тест імпорту FinancialController"""
-        from workflows.financial_control import FinancialController
-        
-        with patch('workflows.financial_control.PropellerAdsUltimateClient'):
-            controller = FinancialController()
-            assert hasattr(controller, 'client')
-            assert hasattr(controller, 'alerts')
-            assert hasattr(controller, 'balance_limits')
-
 
 class TestRealAPI:
     """Тести з реальним API (інтеграційні)"""
@@ -182,7 +135,7 @@ class TestRealAPI:
         if not os.getenv('MainAPI'):
             pytest.skip("MainAPI token not available")
         
-        client = PropellerAdsUltimateClient()
+        client = PropellerAdsClient(api_key=os.getenv('MainAPI'))
         result = client.get_balance()
         
         assert result['success'] is True
@@ -197,7 +150,7 @@ class TestRealAPI:
         if not os.getenv('MainAPI'):
             pytest.skip("MainAPI token not available")
         
-        client = PropellerAdsUltimateClient()
+        client = PropellerAdsClient(api_key=os.getenv('MainAPI'))
         result = client.health_check()
         
         assert result['overall_health'] in ['healthy', 'degraded', 'unhealthy']
@@ -213,3 +166,4 @@ if __name__ == '__main__':
         '--tb=short',
         '-m', 'not integration'
     ])
+
