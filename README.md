@@ -3,281 +3,120 @@
 **Production-ready PropellerAds API v5 client with AI-powered natural language interface**
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![API Coverage](https://img.shields.io/badge/API%20Coverage-164%20endpoints-green.svg)](docs/api-reference.md)
+[![API Coverage](https://img.shields.io/badge/API%20Coverage-100%25-green.svg)](docs/api-reference.md)
 [![MCP Integration](https://img.shields.io/badge/MCP%20Integration-✓-brightgreen.svg)](docs/MCP_INTEGRATION_GUIDE.md)
-[![AI Optimized](https://img.shields.io/badge/AI%20Optimized-✓-brightgreen.svg)](src/enhanced_ai_interface.py)
+[![AI Optimized](https://img.shields.io/badge/AI%20Optimized-✓-brightgreen.svg)](docs/ai-agents/)
 
-## 🎯 **Revolutionary Features**
+## 📋 Table of Contents
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Quick Start](#quick-start)
+4. [Repository Structure](#repository-structure)
+5. [Basic Usage](#basic-usage)
+6. [Natural Language Interface](#natural-language-interface)
+7. [MCP Integration](#mcp-integration)
+8. [Advanced Features](#advanced-features)
+9. [AI Agent Documentation](#ai-agent-documentation)
+10. [Testing & Examples](#testing--examples)
+11. [API Reference](#api-reference)
+12. [Troubleshooting](#troubleshooting)
+13. [Contributing](#contributing)
+14. [License](#license)
+15. [Support](#support)
 
-### 🤖 **Natural Language Interface**
-Control PropellerAds API using plain English commands:
+## 1. 🚪 Introduction
+This repository contains a production-ready Python client for the PropellerAds API v5. It is designed to be used by both developers and AI agents, providing a robust and easy-to-use interface for interacting with the PropellerAds platform.
 
-```python
-from src.enhanced_ai_interface import EnhancedPropellerAdsAI
-from propellerads.client import PropellerAdsClient
+The client is built with a focus on reliability, performance, and ease of use. It includes a number of advanced features, such as intelligent retry, rate limiting, and a circuit breaker, to ensure that your application can handle any API issues that may arise.
 
-# Initialize
-client = PropellerAdsClient(api_key="your_api_key")
-ai = EnhancedPropellerAdsAI(client)
+In addition, the client includes an AI-powered natural language interface, which allows you to control the PropellerAds API using plain English commands. This makes it easy for AI agents to interact with the API, and it also makes it easier for developers to build applications that use the API.
 
-# Use natural language commands
-ai.process_natural_language_command("show my balance")
-ai.process_natural_language_command("list all campaigns") 
-ai.process_natural_language_command("get performance summary")
-ai.process_natural_language_command("show targeting options")
-```
+## 2. 🎯 Features
+- **Full API Coverage:** The client provides access to all 164 endpoints of the PropellerAds API v5.
+- **Natural Language Interface:** Control the API using plain English commands.
+- **MCP Integration:** Ready for Claude Desktop and other AI tools.
+- **Enterprise-Grade Client:** Intelligent retry, rate limiting, circuit breaker, and more.
+- **AI-Optimized:** Designed for seamless integration with AI agents.
+- **Production-Ready:** Comprehensive error handling and testing.
 
-### 🔌 **MCP (Model Context Protocol) Integration**
-Ready for Claude Desktop and other AI tools:
+## 3. 🚀 Quick Start
+See the [QUICK_START.md](docs/QUICK_START.md) guide for a streamlined setup guide for new users.
 
-```json
-{
-  "mcpServers": {
-    "propellerads": {
-      "command": "python",
-      "args": ["src/mcp_server.py"],
-      "env": {
-        "MainAPI": "your_propellerads_api_key"
-      }
-    }
-  }
-}
-```
-
-### 🏗️ **Enterprise-Grade Client**
-- **Intelligent retry** with exponential backoff
-- **Rate limiting** with token bucket algorithm  
-- **Circuit breaker** pattern for fault tolerance
-- **Professional logging** with request IDs
-- **Connection pooling** for optimal performance
-
-## 📁 **Repository Structure**
-
+## 4. 📁 Repository Structure
 ```
 propellerads-api-encyclopedia/
 ├── propellerads/                   # Main client package
-│   ├── client.py                   # Core API client
-│   ├── models/                     # Pydantic data models
-│   └── utils/                      # Utility functions
+│   ├── client_enhanced.py          # Enhanced API client
+│   ├── schemas/                    # Pydantic data models
+│   └── api/                        # API endpoints
 ├── src/                            # Enhanced features
 │   ├── enhanced_ai_interface.py    # Natural language interface
-│   ├── mcp_server.py              # MCP server for Claude Desktop
-│   ├── ai_interface.py            # AI-optimized interface
+│   ├── mcp_server.py               # MCP server for Claude Desktop
 │   └── examples/                   # Working code examples
 ├── docs/                           # Comprehensive documentation
-│   ├── MCP_INTEGRATION_GUIDE.md   # MCP setup guide
-│   ├── api-reference.md           # API documentation
-│   └── ai-agents/                 # AI-specific docs
-├── workflows/                      # Ready-to-use automation
-│   ├── campaign_monitoring.py     # Performance monitoring
-│   └── financial_control.py       # Budget management
-└── tests/                         # Test suite
+│   ├── QUICK_START.md              # Quick start guide
+│   ├── ADVANCED_USAGE.md           # Advanced usage guide
+│   ├── MCP_INTEGRATION_GUIDE.md    # MCP setup guide
+│   ├── api-reference.md            # API documentation
+│   └── ai-agents/                  # AI-specific docs
+└── tests/                          # Test suite
 ```
 
-## 🚀 **Quick Start**
-
-### 1. **Installation**
-```bash
-# Clone repository
-git clone https://github.com/pavelraiden/propellerads-api-encyclopedia.git
-cd propellerads-api-encyclopedia
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set API key
-export MainAPI="your_propellerads_api_key"
-```
-
-### 2. **Basic Usage**
+## 5. 📖 Basic Usage
 ```python
-from propellerads.client import PropellerAdsClient
+from propellerads.client_enhanced import EnhancedPropellerAdsClient
 
 # Initialize client
-client = PropellerAdsClient(api_key="your_api_key")
+client = EnhancedPropellerAdsClient(api_key="your_api_key")
 
 # Check balance
-balance = client.get_balance()
+balance = client.balance.get_balance()
 print(f"Balance: ${balance.amount}")
 
 # Get campaigns
-campaigns = client.get_campaigns()
+campaigns = client.campaigns.get_campaigns()
 print(f"Total campaigns: {len(campaigns)}")
 ```
 
-### 3. **Natural Language Interface**
+## 6. 🤖 Natural Language Interface
 ```python
-from src.enhanced_ai_interface import EnhancedPropellerAdsAI
+from src.ai_interface import AIInterface
 
 # Initialize AI interface
-ai = EnhancedPropellerAdsAI(client)
+ai = AIInterface(client)
 
 # Use natural language
 result = ai.process_natural_language_command("show my balance")
-print(result['natural_language_summary'])  # "💰 Your account balance is $1663.90"
+print(result["natural_language_summary"])  # "💰 Your account balance is $1635.22"
 ```
 
-### 4. **MCP Integration (Claude Desktop)**
-```bash
-# Add to Claude Desktop config
-cp claude_desktop_config.json ~/.config/claude-desktop/
+## 7. 🔌 MCP Integration
+See the [MCP_INTEGRATION_GUIDE.md](docs/MCP_INTEGRATION_GUIDE.md) for step-by-step instructions for Claude Desktop integration.
 
-# Start MCP server
-python src/mcp_server.py
-```
+## 8. 🔧 Advanced Features
+See the [ADVANCED_USAGE.md](docs/ADVANCED_USAGE.md) for an in-depth look at intelligent insights, automation, and error handling.
 
-## 🎯 **For AI Agents**
+## 9. 🧠 AI Agent Documentation
+See the [ai-agents/](docs/ai-agents/) directory for a comprehensive guide for AI agents, including best practices and examples.
 
-### **Connected Apps Configuration**
-Use this in your PropellerAds connected app note:
+## 10. 🧪 Testing & Examples
+See the [tests/](tests/) directory for detailed instructions for running tests and example scripts.
 
-```
-PROPELLERADS API KNOWLEDGE BASE
-Repository: github.com/pavelraiden/propellerads-api-encyclopedia
-Version: 2.0.0 (MCP Enhanced)
+## 11. 📚 API Reference
+See the [api-reference.md](docs/api-reference.md) for complete documentation for all 164 API endpoints.
 
-CAPABILITIES:
-- Natural Language Campaign Management
-- Real-time Performance Monitoring  
-- Intelligent Optimization Recommendations
-- Automated Financial Control
+## 12. 🩺 Troubleshooting
+See the [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for common issues and solutions, plus error code explanations.
 
-USAGE INSTRUCTIONS:
-1. Clone repository to sandbox
-2. Import EnhancedPropellerAdsAI from src.enhanced_ai_interface
-3. Use natural language commands for operations
-4. Reference MCP integration for Claude Desktop
+## 13. 🤝 Contributing
+See the [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines for contributing to the project.
 
-EXAMPLE COMMANDS:
-- "show my balance"
-- "list active campaigns" 
-- "get performance summary"
-- "show targeting options"
-- "check API health"
-
-CONSTRAINTS:
-- Rate limits: 60 GET/min, 150 POST/min
-- Requires MainAPI environment variable
-- Write operations need confirmation
-```
-
-### **Natural Language Commands**
-| Command | Description | Example |
-|---------|-------------|---------|
-| `show my balance` | Get account balance | "💰 Your account balance is $1663.90" |
-| `list all campaigns` | Get campaign list | "📊 Found 2 campaigns matching your criteria" |
-| `get performance summary` | Performance analysis | "📈 Performance summary for last 7 days" |
-| `show targeting options` | Available targeting | "🎯 7 countries, 3 devices, 4 browsers available" |
-| `check API health` | API status check | "✅ API is healthy" |
-
-## 🧪 **Testing & Examples**
-
-### **Run Examples**
-```bash
-# Test basic functionality
-python src/examples/quick_start.py
-
-# Test enhanced AI interface  
-python src/examples/enhanced_client_demo.py
-
-# Test workflows
-python workflows/campaign_monitoring.py
-```
-
-### **Test Natural Language Interface**
-```bash
-# Interactive testing
-python -c "
-from propellerads.client import PropellerAdsClient
-from src.enhanced_ai_interface import EnhancedPropellerAdsAI
-import os
-
-client = PropellerAdsClient(os.getenv('MainAPI'))
-ai = EnhancedPropellerAdsAI(client)
-
-# Test commands
-commands = ['show my balance', 'list all campaigns', 'check API health']
-for cmd in commands:
-    result = ai.process_natural_language_command(cmd)
-    print(f'{cmd}: {result[\"natural_language_summary\"]}')
-"
-```
-
-## 📊 **Live API Status**
-
-**Current Test Results** (Updated automatically):
-- ✅ **Account Balance**: $1,663.90
-- ✅ **Active Campaigns**: 2 campaigns found
-- ✅ **API Health**: All endpoints responding
-- ✅ **Natural Language**: 100% success rate (7/7 commands)
-- ✅ **Response Time**: <0.4s average
-
-## 🔧 **Advanced Features**
-
-### **Intelligent Insights**
-```python
-# Get AI-powered insights
-insights = ai.get_intelligent_insights()
-print(f"Account Health Score: {insights['account_health']['score']}")
-print(f"Recommendations: {insights['recommendations']}")
-```
-
-### **Workflow Automation**
-```python
-# Campaign monitoring
-from workflows.campaign_monitoring import monitor_campaigns
-results = monitor_campaigns(days=7)
-
-# Financial control
-from workflows.financial_control import check_budget_alerts
-alerts = check_budget_alerts()
-```
-
-### **Error Recovery**
-The system includes comprehensive error handling:
-- **Rate limiting** (429) → Exponential backoff
-- **Authentication** (401) → Credential validation  
-- **Validation** (400) → Parameter correction
-- **Network issues** → Retry with circuit breaker
-
-## 📚 **Documentation**
-
-- [MCP Integration Guide](docs/MCP_INTEGRATION_GUIDE.md) - Claude Desktop setup
-- [API Reference](docs/api-reference.md) - Complete endpoint documentation
-- [Integration Guide](docs/integration-guide.md) - Setup instructions
-- [Examples](src/examples/) - Working code samples
-
-## 🤝 **Contributing**
-
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all examples work
-5. Update documentation
-6. Submit a pull request
-
-## 📄 **License**
-
+## 14. 📄 License
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🆘 **Support**
-
+## 15. 🆘 Support
 - **Issues**: Open a GitHub issue
 - **Documentation**: Check [docs/](docs/) directory
 - **Examples**: See [src/examples/](src/examples/)
 - **MCP Integration**: See [docs/MCP_INTEGRATION_GUIDE.md](docs/MCP_INTEGRATION_GUIDE.md)
 
-## 🏆 **Achievements**
-
-- ✅ **164 API endpoints** fully tested
-- ✅ **Natural language interface** with 100% success rate
-- ✅ **MCP integration** ready for Claude Desktop
-- ✅ **Enterprise-grade** reliability and performance
-- ✅ **AI-optimized** for seamless agent integration
-- ✅ **Production-ready** with comprehensive error handling
-
----
-
-**🚀 Ready for production use by AI agents and developers!**
-
-*PropellerAds API Encyclopedia v2.0.0 - The ultimate toolkit for PropellerAds API integration*
