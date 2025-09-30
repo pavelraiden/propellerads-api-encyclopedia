@@ -1,0 +1,506 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199304285
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/countries
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/countries\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:24 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - eff5277a01fb2827ace8928b0a474881 req_1759199304285
+      content-length:
+      - '104'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199304285
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/countries
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/countries\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:25 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 8becbf33765d397e71ad7e1a52e57ad9 req_1759199304285
+      content-length:
+      - '104'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199304285
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/countries
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/countries\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:26 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - c2df5922dd0563dd065b457f6e1b1901 req_1759199304285
+      content-length:
+      - '104'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199304285
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/countries
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/countries\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:28 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 5d8b628d267243cf1ae48fdd1c4bd5c6 req_1759199304285
+      content-length:
+      - '104'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199309029
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/os
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/os\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:29 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 4b8be413a2caa977b45c002ce41b8505 req_1759199309029
+      content-length:
+      - '97'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199309029
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/os
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/os\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:30 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 9cae9566e0d56fe11914702ec18868ce req_1759199309029
+      content-length:
+      - '97'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199309029
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/os
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/os\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:31 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 8d2ee1fe5cb6405134dfe5d7f2cfa845 req_1759199309029
+      content-length:
+      - '97'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199309029
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/os
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/os\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:33 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 7ff95904939cdaaaa0700977578fb043 req_1759199309029
+      content-length:
+      - '97'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199313734
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/browsers
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/browsers\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:33 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 26fb3986220295101433b84c0b195c14 req_1759199313734
+      content-length:
+      - '103'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199313734
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/browsers
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/browsers\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:34 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - fb72f9a58ad506b06ac1f56c5af92975 req_1759199313734
+      content-length:
+      - '103'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199313734
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/browsers
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/browsers\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:36 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 2da0d1fbb3f85d91c3fdf31639ff8ed4 req_1759199313734
+      content-length:
+      - '103'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199313734
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/collections/browsers
+  response:
+    body:
+      string: '"No route found for \u0022GET https:\/\/ssp-api.propellerads.com\/v5\/adv\/collections\/browsers\u0022"'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:38 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - d5e8c1624f7499b9b30bbb6b652758a5 req_1759199313734
+      content-length:
+      - '103'
+    status:
+      code: 404
+      message: Not Found
+version: 1

@@ -1,0 +1,198 @@
+interactions:
+- request:
+    body: '{"name": "LIFECYCLE_TEST_1759199339", "direction": "onclick", "rate_model":
+      "cpm", "target_url": "https://propellerads.com/?lifecycle_test=1", "status":
+      1, "started_at": "29/09/2025", "expired_at": "06/10/2025", "targeting": {"country":
+      {"list": ["us"], "is_excluded": false}}, "rates": [{"countries": ["us"], "amount":
+      0.01}]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '327'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199339558
+    method: POST
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns
+  response:
+    body:
+      string: '{"targeting":{"traffic_categories":["The value you selected is not
+        a valid choice."]}}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:59 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - c3675e611607416865faace29961cb96 req_1759199339558
+      X-User-Id:
+      - '3781441'
+    status:
+      code: 400
+      message: Bad Request
+- request:
+    body: '{"name": "LIFECYCLE_TEST_1759199339", "direction": "onclick", "rate_model":
+      "cpm", "target_url": "https://propellerads.com/?lifecycle_test=1", "status":
+      1, "started_at": "29/09/2025", "expired_at": "06/10/2025", "targeting": {"country":
+      {"list": ["us"], "is_excluded": false}}, "rates": [{"countries": ["us"], "amount":
+      0.01}]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '327'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199339558
+    method: POST
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns
+  response:
+    body:
+      string: '{"targeting":{"traffic_categories":["The value you selected is not
+        a valid choice."]}}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:29:00 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 1b5f10798ac24afddeabeabf14562408 req_1759199339558
+      X-User-Id:
+      - '3781441'
+    status:
+      code: 400
+      message: Bad Request
+- request:
+    body: '{"name": "LIFECYCLE_TEST_1759199339", "direction": "onclick", "rate_model":
+      "cpm", "target_url": "https://propellerads.com/?lifecycle_test=1", "status":
+      1, "started_at": "29/09/2025", "expired_at": "06/10/2025", "targeting": {"country":
+      {"list": ["us"], "is_excluded": false}}, "rates": [{"countries": ["us"], "amount":
+      0.01}]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '327'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199339558
+    method: POST
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns
+  response:
+    body:
+      string: '{"targeting":{"traffic_categories":["The value you selected is not
+        a valid choice."]}}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:29:02 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - dba24202f72df969d766a12ed3867a2a req_1759199339558
+      X-User-Id:
+      - '3781441'
+    status:
+      code: 400
+      message: Bad Request
+- request:
+    body: '{"name": "LIFECYCLE_TEST_1759199339", "direction": "onclick", "rate_model":
+      "cpm", "target_url": "https://propellerads.com/?lifecycle_test=1", "status":
+      1, "started_at": "29/09/2025", "expired_at": "06/10/2025", "targeting": {"country":
+      {"list": ["us"], "is_excluded": false}}, "rates": [{"countries": ["us"], "amount":
+      0.01}]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '327'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199339558
+    method: POST
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns
+  response:
+    body:
+      string: '{"targeting":{"traffic_categories":["The value you selected is not
+        a valid choice."]}}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:29:04 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 27446f1cca04bdfea403fb4105eac111 req_1759199339558
+      X-User-Id:
+      - '3781441'
+    status:
+      code: 400
+      message: Bad Request
+version: 1

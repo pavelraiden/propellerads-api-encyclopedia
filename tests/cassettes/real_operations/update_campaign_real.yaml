@@ -1,0 +1,246 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199330728
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns?page_size=1
+  response:
+    body:
+      string: '{"result":[{"name":"[OnClick (Popunder)] [CPAG] 9446595","target_url":"https:\/\/healthnman.com\/topausaesandr.php?zoneid={zone_id}&campaignid={campaign_id}&language={language}&country={country}&browser={browser}&subzone={subzone_id}&osys={os}&conect={connection_type}&banid={banner_id}&medium={var10}_{zone_id}&cost={cost}&clickid=${SUBID}","started_at":"2025-05-18","direction_id":1,"rate_model":"scpa","limit_total_amount":null,"limit_daily_amount":150.0,"id":9446595,"status":8,"is_archived":1}],"meta":{"total_items":802,"total_pages":802,"page_size":1,"page":1}}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Security-Policy:
+      - frame-ancestors 'none';
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:51 GMT
+      Referrer-Policy:
+      - no-referrer
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - master-only
+      X-Request-Id:
+      - 22b841a8f284a95faa5131b2832ac788 req_1759199330728
+      X-User-Id:
+      - '3781441'
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '568'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"name": "[OnClick (Popunder)] [CPAG] 9446595_UPDATED_TEST", "limit_daily_amount":
+      1}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '85'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199331129
+    method: PATCH
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns/9446595
+  response:
+    body:
+      string: '{"errors":["Access denied."]}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:51 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 0854fefb486a04b91031476164f42fb3 req_1759199331129
+      X-User-Id:
+      - '3781441'
+      content-length:
+      - '29'
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: '{"name": "[OnClick (Popunder)] [CPAG] 9446595_UPDATED_TEST", "limit_daily_amount":
+      1}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '85'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199331129
+    method: PATCH
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns/9446595
+  response:
+    body:
+      string: '{"errors":["Access denied."]}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:52 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - fac6fad8d81f0557a8b824aa814be5b2 req_1759199331129
+      X-User-Id:
+      - '3781441'
+      content-length:
+      - '29'
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: '{"name": "[OnClick (Popunder)] [CPAG] 9446595_UPDATED_TEST", "limit_daily_amount":
+      1}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '85'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199331129
+    method: PATCH
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns/9446595
+  response:
+    body:
+      string: '{"errors":["Access denied."]}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:53 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 46e4e5f8c2152a468768ccc68140f9cd req_1759199331129
+      X-User-Id:
+      - '3781441'
+      content-length:
+      - '29'
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: '{"name": "[OnClick (Popunder)] [CPAG] 9446595_UPDATED_TEST", "limit_daily_amount":
+      1}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '85'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759199331129
+    method: PATCH
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns/9446595
+  response:
+    body:
+      string: '{"errors":["Access denied."]}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 02:28:55 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Request-Id:
+      - 1837af868bcf1ee92fea4b726ede878b req_1759199331129
+      X-User-Id:
+      - '3781441'
+      content-length:
+      - '29'
+    status:
+      code: 403
+      message: Forbidden
+version: 1

@@ -1,27 +1,31 @@
 """Client tests."""
 import pytest
 from unittest.mock import Mock, patch
-from propellerads import PropellerAdsClient
+from propellerads import LegacyPropellerAdsClient as PropellerAdsClient
 
 def test_client_init():
+    """Test client initialization."""
     client = PropellerAdsClient(api_key="test-key")
+    assert hasattr(client.config, 'api_key')
     assert client.config.api_key == "test-key"
 
-@patch('propellerads.client.requests.Session')
-def test_get_balance(mock_session):
+@patch('requests.Session.request')
+def test_get_balance(mock_request):
+    """Test balance retrieval."""
     mock_response = Mock()
     mock_response.status_code = 200
-    mock_response.text = '"1234.56"'
+    mock_response.text = '1234.56'
     mock_response.headers = {'content-type': 'text/plain'}
-    mock_session.return_value.request.return_value = mock_response
+    mock_request.return_value = mock_response
     
     client = PropellerAdsClient(api_key="test-key")
     balance = client.get_balance()
     
-    assert balance.amount == 1234.56
+    assert float(balance.amount) == 1234.56
     assert balance.currency == "USD"
 
 def test_health_check():
+    """Test health check."""
     with patch('propellerads.client.PropellerAdsClient.get_balance') as mock_balance:
         mock_balance.return_value = Mock(formatted="$1,234.56")
         

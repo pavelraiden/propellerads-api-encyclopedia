@@ -27,10 +27,13 @@ logger = logging.getLogger(__name__)
 
 class BalanceResponse:
     """Simple balance response."""
-    def __init__(self, amount: float, currency: str = "USD"):
+    def __init__(self, amount, currency: str = "USD"):
+        # Handle string inputs by removing quotes and converting
+        if isinstance(amount, str):
+            amount = amount.strip('\'"')
         self.amount = Decimal(str(amount))
         self.currency = currency
-        self.formatted = f"${float(amount):,.2f}"
+        self.formatted = f"${float(self.amount):,.2f}"
         self.last_updated = datetime.now()
 
 
@@ -126,7 +129,8 @@ class PropellerAdsClient:
         method: str,
         endpoint: str,
         data: Optional[Dict[str, Any]] = None,
-        params: Optional[Dict[str, Any]] = None
+        params: Optional[Dict[str, Any]] = None,
+        **kwargs
     ) -> requests.Response:
         """
         Make API request with retry logic and error handling.
@@ -164,12 +168,16 @@ class PropellerAdsClient:
                 start_time = time.time()
                 
                 # Make request
+                # Handle json parameter from kwargs
+                json_data = kwargs.pop('json', data)
+                
                 response = self.session.request(
                     method=method,
                     url=url,
-                    json=data,
+                    json=json_data,
                     params=params,
-                    timeout=self.config.timeout
+                    timeout=self.config.timeout,
+                    **kwargs
                 )
                 
                 response_time = time.time() - start_time

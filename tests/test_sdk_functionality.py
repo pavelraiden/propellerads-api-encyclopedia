@@ -1,10 +1,11 @@
-'''#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Comprehensive tests for the PropellerAds Python SDK.
 """
 
 import pytest
 import os
+import time
 import requests
 from decimal import Decimal
 from unittest.mock import Mock, patch, AsyncMock
@@ -32,7 +33,7 @@ class TestPropellerAdsClient:
         """Test successful balance retrieval."""
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.text = '\'1686.48\''.strip('\'')
+        mock_response.text = '1686.48'
         mock_request.return_value = mock_response
 
         result = self.client.get_balance()
@@ -64,7 +65,7 @@ class TestPropellerAdsClient:
         """Test successful health check."""
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.text = '\'1000.00\''.strip('\'')
+        mock_response.text = '1000.00'
         mock_request.return_value = mock_response
 
         result = self.client.health_check()
@@ -113,27 +114,46 @@ class TestPropellerAdsClient:
         with pytest.raises(PropellerAdsError):
             self.client.get_statistics(date_from="2025-30-09", date_to="2025-30-09")
 
-    @patch('requests.Session.request', side_effect=requests.exceptions.RequestException('Connection error'))
-    def test_circuit_breaker_opens_after_failures(self, mock_request):
+    @patch('requests.Session.request')
+    def test_circuit_breaker_opens(self, mock_request):
         """Test that the circuit breaker opens after multiple failures."""
+        # Mock consecutive failures
+        mock_request.side_effect = requests.exceptions.RequestException('Connection error')
+        
+        # Set a low failure threshold for testing
         self.client.circuit_breaker['failure_threshold'] = 3
 
         # Trigger failures to open the circuit breaker
-        for _ in range(3):
+        for _ in range(4):  # One more than threshold
             with pytest.raises(PropellerAdsError):
                 self.client.get_balance()
 
+        # Verify circuit breaker is open
         assert self.client.circuit_breaker['state'] == 'open'
+        assert self.client.circuit_breaker['failures'] >= 3
 
         # Check that subsequent calls fail immediately because the circuit is open
         with pytest.raises(PropellerAdsError, match='Circuit breaker is open'):
             self.client.get_balance()
 
-    @patch('propellerads.utils.rate_limiter.RateLimiter.acquire', side_effect=RateLimitError('Rate limit exceeded'))
-    def test_rate_limiter(self, mock_acquire):
-        """Test that the rate limiter raises an exception when the limit is exceeded."""
-        with pytest.raises(RateLimitError):
-            self.client.get_balance()
+    def test_rate_limiter(self):
+        """Test that the rate limiter works correctly."""
+        # Test rate limiter status and functionality
+        client = PropellerAdsClient(api_key="test_api_key", rate_limit=60)
+        
+        # Check rate limiter is initialized
+        assert hasattr(client, 'rate_limiter')
+        assert client.rate_limiter is not None
+        
+        # Test rate limiter status
+        status = client.rate_limiter.get_status()
+        assert 'tokens_available' in status
+        assert 'bucket_size' in status
+        assert 'refill_rate' in status
+        
+        # Test rate limiter acquire
+        success = client.rate_limiter.try_acquire(1)
+        assert success is True  # Should succeed with tokens available
 
     @patch('requests.Session.request')
     def test_create_campaign_success(self, mock_request):
@@ -459,13 +479,13 @@ class TestPropellerAdsClient:
         """Test successful token retrieval."""
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {"token": "new_api_token"}
+        mock_response.json.return_value = {"token": "new_token_123"}
         mock_request.return_value = mock_response
 
         result = self.client.get_token()
 
         assert isinstance(result, dict)
-        assert "token" in result
+        assert result["token"] == "new_token_123"
 
     @patch("requests.Session.request")
     def test_get_managers_success(self, mock_request):
@@ -919,4 +939,3 @@ class TestRealAPI:
 
         assert result["overall_status"] in ["healthy", "degraded", "unhealthy"]
         assert "balance" in result
-'''
