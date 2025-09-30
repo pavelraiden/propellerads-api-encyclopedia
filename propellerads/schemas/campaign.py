@@ -33,9 +33,9 @@ class CampaignTargeting(PropellerBaseSchema):
         description="Alpha-2 country codes in lowercase (ISO 3166)"
     )
     
-    # Time table targeting (required)
-    time_table: TargetingList = Field(
-        description="Day of week and hour for scheduling (e.g., Mon00, Tue03)"
+    # Time table targeting (optional)
+    time_table: Optional[TargetingList] = Field(
+        default=None, description="Day of week and hour for scheduling (e.g., Mon00, Tue03)"
     )
     
     # Connection type

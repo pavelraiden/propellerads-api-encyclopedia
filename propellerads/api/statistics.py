@@ -29,8 +29,8 @@ class StatisticsAPI(BaseAPI):
         Get statistics (synchronous)
         
         Args:
-            date_from: Start date
-            date_to: End date
+            date_from: Start date (YYYY-MM-DD format)
+            date_to: End date (YYYY-MM-DD format)
             group_by: Group by fields
             campaign_ids: Filter by campaign IDs
             
@@ -39,17 +39,17 @@ class StatisticsAPI(BaseAPI):
         """
         logger.debug(f"Getting statistics: {date_from} to {date_to}")
         
-        data = {
+        params = {
             'day_from': date_from,
             'day_to': date_to,
             'tz': '+0000',
-            'group_by': group_by or ['campaign_id']
+            'group_by[]': group_by or ['campaign_id']
         }
         
         if campaign_ids:
-            data['campaign_ids'] = campaign_ids
+            params['campaign_id[]'] = campaign_ids
         
-        response = self.client._make_request('POST', '/adv/statistics', data=data)
+        response = self.client._make_request('GET', '/adv/statistics', params=params)
         return response.json()
     
     async def get_statistics_async(self, filters: StatisticsFilters) -> Statistics:

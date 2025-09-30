@@ -16,26 +16,13 @@ from .exceptions import PropellerAdsError, AuthenticationError, RateLimitError, 
 from .utils.rate_limiter import RateLimiter
 from .monitoring.metrics import MetricsCollector
 
-# Import API classes (with fallback for missing modules)
-try:
-    from .api.campaigns import CampaignAPI
-except ImportError:
-    CampaignAPI = None
+# Import API classes
+from .api.campaigns import CampaignAPI
+from .api.statistics import StatisticsAPI
+from .api.balance import BalanceAPI
+from .api.collections import CollectionsAPI
 
-try:
-    from .api.statistics import StatisticsAPI
-except ImportError:
-    StatisticsAPI = None
-
-try:
-    from .api.balance import BalanceAPI
-except ImportError:
-    BalanceAPI = None
-
-try:
-    from .api.collections import CollectionsAPI
-except ImportError:
-    CollectionsAPI = None
+# All API classes imported above
 
 # Import schemas (with fallback for missing modules)
 try:
@@ -134,11 +121,11 @@ class EnhancedPropellerAdsClient:
             'recovery_timeout': self.config.circuit_breaker_timeout
         }
         
-        # Initialize API modules (only if available)
-        self.campaigns = CampaignAPI(self) if CampaignAPI else None
-        self.statistics = StatisticsAPI(self) if StatisticsAPI else None
-        self.balance = BalanceAPI(self) if BalanceAPI else None
-        self.collections = CollectionsAPI(self) if CollectionsAPI else None
+        # Initialize API modules
+        self.campaigns = CampaignAPI(self)
+        self.statistics = StatisticsAPI(self)
+        self.balance = BalanceAPI(self)
+        self.collections = CollectionsAPI(self)
         
         logger.info(f"Enhanced PropellerAds client initialized (rate_limit: {self.config.rate_limit}/min)")
     
