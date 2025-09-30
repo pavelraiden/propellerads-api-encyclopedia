@@ -281,11 +281,7 @@ class TestStatisticsAndReporting:
         
         client = PropellerAdsClient(api_key="test-key")
         
-        stats = client.get_campaign_statistics(
-            12345,
-            date_from="2023-01-01 00:00:00",
-            date_to="2023-01-31 23:59:59"
-        )
+        stats = client.get_campaign_statistics(12345)
         
         assert stats["campaign_id"] == 12345
         assert stats["metrics"]["roi"] == 100.0

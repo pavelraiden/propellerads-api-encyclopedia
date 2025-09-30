@@ -45,7 +45,8 @@ class TestMCPServer:
     @pytest.fixture
     def mcp_server(self, mock_client):
         """MCP server with mocked client"""
-        with patch.dict(os.environ, {"MainAPI": "test_token"}):
+        real_api_key = os.environ.get("MainAPI", "test_token")
+        with patch.dict(os.environ, {"MainAPI": real_api_key}):
             with patch("mcp_server.PropellerAdsUltimateClient", return_value=mock_client):
                 server = PropellerAdsMCPServer()
                 server.client = mock_client
@@ -293,7 +294,8 @@ class TestMCPIntegration:
     @pytest.fixture
     def mock_environment(self):
         """Mock environment setup"""
-        with patch.dict(os.environ, {"MainAPI": "test_token"}):
+        real_api_key = os.environ.get("MainAPI", "test_token")
+        with patch.dict(os.environ, {"MainAPI": real_api_key}):
             yield
     
     def test_mcp_server_initialization(self, mock_environment):
