@@ -1,0 +1,194 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759190513449
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/statistics?day_from=2025-08-30&day_to=2025-09-29&tz=%2B0000&group_by%5B%5D=campaign_id
+  response:
+    body:
+      string: '{"tz":["Time zone is available only in the weekly period."]}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 00:01:53 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-RateLimit-Limit:
+      - '2'
+      X-RateLimit-Remaining:
+      - '1'
+      X-RateLimit-Reset:
+      - '1759190573'
+      X-Request-Id:
+      - a154e1997d9b2fe2cb092c8fd261ca4d req_1759190513449
+      X-User-Id:
+      - '3781441'
+    status:
+      code: 400
+      message: Bad Request
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759190513449
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/statistics?day_from=2025-08-30&day_to=2025-09-29&tz=%2B0000&group_by%5B%5D=campaign_id
+  response:
+    body:
+      string: '{"tz":["Time zone is available only in the weekly period."]}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Sep 2025 00:01:54 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-RateLimit-Limit:
+      - '2'
+      X-RateLimit-Remaining:
+      - '0'
+      X-RateLimit-Reset:
+      - '1759190573'
+      X-Request-Id:
+      - 49c3d91515730a3940125d7971d142f6 req_1759190513449
+      X-User-Id:
+      - '3781441'
+    status:
+      code: 400
+      message: Bad Request
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759190513449
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/statistics?day_from=2025-08-30&day_to=2025-09-29&tz=%2B0000&group_by%5B%5D=campaign_id
+  response:
+    body:
+      string: You exceeded the rate limit
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - text/html; charset=UTF-8
+      Date:
+      - Tue, 30 Sep 2025 00:01:55 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-RateLimit-Limit:
+      - '2'
+      X-RateLimit-Remaining:
+      - '0'
+      X-RateLimit-Reset:
+      - '1759190573'
+      X-Request-Id:
+      - 2d3f98382320e3fa670be9eed15c2f71 req_1759190513449
+      X-User-Id:
+      - '3781441'
+    status:
+      code: 429
+      message: Too Many Requests
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/2.0.0
+      X-Request-ID:
+      - req_1759190513449
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/statistics?day_from=2025-08-30&day_to=2025-09-29&tz=%2B0000&group_by%5B%5D=campaign_id
+  response:
+    body:
+      string: You exceeded the rate limit
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Type:
+      - text/html; charset=UTF-8
+      Date:
+      - Tue, 30 Sep 2025 00:01:58 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-RateLimit-Limit:
+      - '2'
+      X-RateLimit-Remaining:
+      - '0'
+      X-RateLimit-Reset:
+      - '1759190573'
+      X-Request-Id:
+      - 91fe140a6df2e315624ceb644c4bfce7 req_1759190513449
+      X-User-Id:
+      - '3781441'
+    status:
+      code: 429
+      message: Too Many Requests
+version: 1

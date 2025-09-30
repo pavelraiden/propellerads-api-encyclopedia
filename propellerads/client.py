@@ -30,7 +30,7 @@ class BalanceResponse:
     def __init__(self, amount: float, currency: str = "USD"):
         self.amount = Decimal(str(amount))
         self.currency = currency
-        self.formatted = f"${amount:,.2f}"
+        self.formatted = f"${float(amount):,.2f}"
         self.last_updated = datetime.now()
 
 

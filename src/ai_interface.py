@@ -18,6 +18,79 @@ class PropellerAdsAIInterface:
         self.task_patterns = self._load_task_patterns()
         self.constraints = self._load_constraints()
     
+    def process_natural_language_command(self, command: str, confirm_write_operations: bool = True) -> Dict[str, Any]:
+        """
+        Process natural language commands and execute corresponding API operations.
+        
+        Args:
+            command (str): Natural language command to process
+            confirm_write_operations (bool): Whether to confirm write operations before execution
+            
+        Returns:
+            Dict[str, Any]: Response containing action, result, and natural language summary
+            
+        Examples:
+            >>> ai.process_natural_language_command("show my balance")
+            {'action': 'get_balance', 'result': ..., 'natural_language_summary': '💰 Your account balance is $1598.21'}
+            
+            >>> ai.process_natural_language_command("list campaigns")
+            {'action': 'list_campaigns', 'result': [...], 'natural_language_summary': '📊 Found 2 campaigns'}
+        """
+        try:
+            command_lower = command.lower().strip()
+            
+            # Balance queries
+            if any(word in command_lower for word in ['balance', 'money', 'funds', 'account']):
+                balance = self.client.balance.get_balance() if hasattr(self.client, 'balance') else self.client.get_balance()
+                return {
+                    "action": "get_balance",
+                    "result": balance,
+                    "message": f"Your current balance is {balance}"
+                }
+            
+            # Campaign queries
+            elif any(word in command_lower for word in ['campaigns', 'campaign']):
+                if 'list' in command_lower or 'show' in command_lower:
+                    campaigns = self.client.campaigns.get_campaigns() if hasattr(self.client, 'campaigns') else self.client.get_campaigns()
+                    count = len(campaigns) if isinstance(campaigns, list) else 0
+                    return {
+                        "action": "list_campaigns",
+                        "result": campaigns,
+                        "message": f"Found {count} campaigns"
+                    }
+            
+            # Statistics queries
+            elif any(word in command_lower for word in ['stats', 'statistics', 'performance']):
+                stats = self.client.statistics.get_statistics() if hasattr(self.client, 'statistics') else []
+                return {
+                    "action": "get_statistics",
+                    "result": stats,
+                    "message": "Retrieved performance statistics"
+                }
+            
+            # Health check
+            elif any(word in command_lower for word in ['health', 'status', 'check']):
+                health = self.client.health_check() if hasattr(self.client, 'health_check') else {"status": "unknown"}
+                return {
+                    "action": "health_check",
+                    "result": health,
+                    "message": f"API status: {health.get('status', 'unknown')}"
+                }
+            
+            else:
+                return {
+                    "action": "unknown",
+                    "result": None,
+                    "message": f"I don't understand the command: '{command}'. Try asking about balance, campaigns, statistics, or health."
+                }
+                
+        except Exception as e:
+            return {
+                "action": "error",
+                "result": None,
+                "message": f"Error processing command: {str(e)}"
+            }
+    
     def _load_task_patterns(self) -> Dict:
         """Load task patterns from metadata"""
         try:

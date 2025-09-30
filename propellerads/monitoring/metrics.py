@@ -11,6 +11,13 @@ class MetricsCollector:
     def record_request_start(self, method: str, endpoint: str):
         self.requests += 1
     
+    def record_request(self, method: str, endpoint: str, status_code: int, duration: float):
+        """Record a complete request with all details"""
+        self.requests += 1
+        self.total_time += duration
+        if status_code >= 400:
+            self.errors += 1
+    
     def record_request_success(self, response_time: float):
         self.total_time += response_time
     

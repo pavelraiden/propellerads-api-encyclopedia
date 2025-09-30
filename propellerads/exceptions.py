@@ -333,3 +333,10 @@ def handle_api_error(
     )
     
     raise exception
+
+
+# Backward compatibility aliases
+PropellerAdsAPIError = PropellerAdsError
+PropellerAdsAuthError = AuthenticationError
+PropellerAdsRateLimitError = RateLimitError
+PropellerAdsValidationError = ValidationError

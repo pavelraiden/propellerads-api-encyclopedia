@@ -61,8 +61,9 @@ class PropellerAdsMCPServer:
         # Initialize server
         self.server = Server("propellerads-enterprise-mcp")
         
-        # Initialize our enterprise client
-        self.client = PropellerAdsUltimateClient()
+        # Initialize our enhanced client
+        from propellerads.client_enhanced import EnhancedPropellerAdsClient
+        self.client = EnhancedPropellerAdsClient(self.api_token)
         
         # Initialize AI interface
         self.ai_interface = PropellerAdsAIInterface(self.client)
@@ -438,11 +439,12 @@ class PropellerAdsMCPServer:
     async def _handle_get_balance(self) -> Dict[str, Any]:
         """Handle balance request"""
         try:
-            balance = self.client.get_balance()
+            balance = self.client.balance.get_balance()
             return {
-                "balance": float(balance),
+                "balance": balance.formatted if hasattr(balance, 'formatted') else str(balance),
+                "raw_amount": balance.amount if hasattr(balance, 'amount') else balance,
                 "currency": "USD",
-                "status": "success"
+                "timestamp": datetime.now().isoformat()
             }
         except Exception as e:
             return {"error": str(e)}
@@ -460,12 +462,18 @@ class PropellerAdsMCPServer:
             return {"error": str(e)}
     
     async def _handle_list_campaigns(self, status: str = "all", limit: int = 100) -> Dict[str, Any]:
-        """Handle campaign listing"""
+        """Handle campaigns list request"""
         try:
-            campaigns = self.client.get_campaigns()
+            campaigns = self.client.campaigns.get_campaigns(limit=limit)
+            
+            # Handle different response formats
+            if isinstance(campaigns, dict) and 'result' in campaigns:
+                campaigns_list = campaigns['result']
+            else:
+                campaigns_list = campaigns
             
             # Filter by status if specified
-            if status != "all":
+            if status != "all" and isinstance(campaigns_list, list):
                 status_map = {
                     "active": [6],  # working
                     "paused": [7],  # paused
@@ -473,15 +481,12 @@ class PropellerAdsMCPServer:
                     "draft": [1]    # draft
                 }
                 if status in status_map:
-                    campaigns = [c for c in campaigns if c.get("status") in status_map[status]]
-            
-            # Limit results
-            campaigns = campaigns[:limit]
+                    campaigns_list = [c for c in campaigns_list if c.get('status') in status_map[status]]
             
             return {
-                "campaigns": campaigns,
-                "total_count": len(campaigns),
-                "status_filter": status,
+                "campaigns": campaigns_list,
+                "count": len(campaigns_list) if isinstance(campaigns_list, list) else 0,
+                "filter": status,
                 "limit": limit
             }
         except Exception as e:
@@ -490,7 +495,8 @@ class PropellerAdsMCPServer:
     async def _handle_get_campaign_details(self, campaign_id: int) -> Dict[str, Any]:
         """Handle campaign details request"""
         try:
-            campaign = self.client.get_campaign_details(campaign_id)
+            response = self.client._make_request('GET', f'/adv/campaigns/{campaign_id}')
+            campaign = response.json()
             return {
                 "campaign": campaign,
                 "campaign_id": campaign_id
@@ -532,8 +538,8 @@ class PropellerAdsMCPServer:
     async def _handle_get_statistics(self, **kwargs) -> Dict[str, Any]:
         """Handle statistics request"""
         try:
-            # Use our AI interface for intelligent statistics
-            stats = self.ai_interface.get_performance_analytics(**kwargs)
+            # Use enhanced client statistics API
+            stats = self.client.statistics.get_statistics(**kwargs)
             return {
                 "statistics": stats,
                 "parameters": kwargs
@@ -578,7 +584,8 @@ class PropellerAdsMCPServer:
     async def _handle_targeting_options(self, option_type: str = "all") -> Dict[str, Any]:
         """Handle targeting options request"""
         try:
-            options = self.client.get_targeting_options()
+            # Use enhanced client collections API
+            options = self.client.collections.get_targeting_options()
             
             if option_type != "all" and option_type in options:
                 return {option_type: options[option_type]}
