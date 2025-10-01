@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - PropellerAds Interface{% endblock %}
+
+{% block head %}
+<style>
+    .metric-card {
+        transition: transform 0.2s;
+    }
+    .metric-card:hover {
+        transform: translateY(-2px);
+    }
+    .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+    }
+    .status-online { background-color: #28a745; }
+    .status-offline { background-color: #dc3545; }
+    .status-warning { background-color: #ffc107; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div x-data="dashboard()" x-init="init()">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h2 mb-3">
+                <i class="bi bi-speedometer2 text-primary"></i>
+                PropellerAds Dashboard
+            </h1>
+            <p class="text-muted">Monitor your campaigns, balance, and performance metrics</p>
+        </div>
+    </div>
+
+    <!-- Status Cards -->
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card metric-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-wallet2 text-success fs-2"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="card-title text-muted mb-1">Account Balance</h6>
+                            <h4 class="mb-0" x-text="formatCurrency(balance)">Loading...</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card metric-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-graph-up text-primary fs-2"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="card-title text-muted mb-1">Active Campaigns</h6>
+                            <h4 class="mb-0" x-text="campaigns.length">-</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card metric-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-lightning text-warning fs-2"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="card-title text-muted mb-1">API Status</h6>
+                            <div class="d-flex align-items-center">
+                                <span class="status-indicator" :class="apiStatus.propellerads ? 'status-online' : 'status-offline'"></span>
+                                <span x-text="apiStatus.propellerads ? 'Connected' : 'Disconnected'">Checking...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card metric-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-robot text-info fs-2"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="card-title text-muted mb-1">Claude AI</h6>
+                            <div class="d-flex align-items-center">
+                                <span class="status-indicator" :class="apiStatus.claude ? 'status-online' : 'status-offline'"></span>
+                                <span x-text="apiStatus.claude ? 'Available' : 'Unavailable'">Checking...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-lightning-charge"></i>
+                        Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-2">
+                            <button class="btn btn-outline-primary w-100" @click="refreshBalance()">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                Refresh Balance
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <button class="btn btn-outline-success w-100" @click="loadCampaigns()">
+                                <i class="bi bi-list-ul"></i>
+                                Load Campaigns
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="{{ url_for('chat') }}" class="btn btn-outline-info w-100">
+                                <i class="bi bi-chat-dots"></i>
+                                Chat with Claude
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <button class="btn btn-outline-warning w-100" @click="loadStatistics()">
+                                <i class="bi bi-bar-chart"></i>
+                                View Statistics
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaigns Table -->
+    <div class="row mb-4" x-show="campaigns.length > 0">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-graph-up"></i>
+                        Active Campaigns
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Budget</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="campaign in campaigns" :key="campaign.id">
+                                    <tr>
+                                        <td x-text="campaign.id"></td>
+                                        <td x-text="campaign.name || 'Unnamed Campaign'"></td>
+                                        <td>
+                                            <span class="badge" 
+                                                  :class="campaign.status === 'active' ? 'bg-success' : 'bg-secondary'"
+                                                  x-text="campaign.status || 'unknown'">
+                                            </span>
+                                        </td>
+                                        <td x-text="formatCurrency(campaign.budget)"></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" @click="viewCampaign(campaign.id)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="row" x-show="loading">
+        <div class="col-12 text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading data...</p>
+        </div>
+    </div>
+
+    <!-- Error Alert -->
+    <div class="alert alert-danger" x-show="error" x-text="error"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function dashboard() {
+    return {
+        balance: 0,
+        campaigns: [],
+        statistics: {},
+        apiStatus: {
+            propellerads: false,
+            claude: false
+        },
+        loading: false,
+        error: null,
+
+        init() {
+            this.checkApiStatus();
+            this.refreshBalance();
+            this.loadCampaigns();
+            
+            // Set up periodic refresh
+            setInterval(() => {
+                this.checkApiStatus();
+            }, 30000); // Every 30 seconds
+        },
+
+        async checkApiStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                this.apiStatus = {
+                    propellerads: data.propellerads || false,
+                    claude: data.claude || false
+                };
+                if (data.balance !== undefined) {
+                    this.balance = data.balance;
+                }
+            } catch (error) {
+                console.error('Error checking API status:', error);
+                this.apiStatus = { propellerads: false, claude: false };
+            }
+        },
+
+        async refreshBalance() {
+            this.loading = true;
+            this.error = null;
+            try {
+                const response = await fetch('/api/balance');
+                const data = await response.json();
+                if (data.success) {
+                    this.balance = data.balance;
+                } else {
+                    this.error = data.error || 'Failed to load balance';
+                }
+            } catch (error) {
+                this.error = 'Network error: ' + error.message;
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async loadCampaigns() {
+            this.loading = true;
+            this.error = null;
+            try {
+                const response = await fetch('/api/campaigns');
+                const data = await response.json();
+                if (data.success) {
+                    this.campaigns = data.campaigns || [];
+                } else {
+                    this.error = data.error || 'Failed to load campaigns';
+                }
+            } catch (error) {
+                this.error = 'Network error: ' + error.message;
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async loadStatistics() {
+            this.loading = true;
+            this.error = null;
+            try {
+                const response = await fetch('/api/statistics');
+                const data = await response.json();
+                if (data.success) {
+                    this.statistics = data.statistics || {};
+                    console.log('Statistics loaded:', this.statistics);
+                } else {
+                    this.error = data.error || 'Failed to load statistics';
+                }
+            } catch (error) {
+                this.error = 'Network error: ' + error.message;
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        viewCampaign(campaignId) {
+            // TODO: Implement campaign details view
+            alert(`Viewing campaign ${campaignId} - Feature coming soon!`);
+        },
+
+        formatCurrency(amount) {
+            if (amount === null || amount === undefined || isNaN(amount)) {
+                return '$0.00';
+            }
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+    }
+}
+</script>
+{% endblock %}

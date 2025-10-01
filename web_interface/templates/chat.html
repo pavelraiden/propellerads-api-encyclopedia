@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block title %}Claude AI Chat - PropellerAds Interface{% endblock %}
+
+{% block head %}
+<style>
+    .chat-container {
+        height: 70vh;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 1rem;
+        background-color: #f8f9fa;
+    }
+    
+    .message {
+        margin-bottom: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 1rem;
+        max-width: 80%;
+    }
+    
+    .message.user {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+        text-align: right;
+    }
+    
+    .message.assistant {
+        background-color: white;
+        border: 1px solid #dee2e6;
+        margin-right: auto;
+    }
+    
+    .message-time {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        margin-top: 0.25rem;
+    }
+    
+    .typing-indicator {
+        display: none;
+        padding: 0.75rem 1rem;
+        background-color: white;
+        border: 1px solid #dee2e6;
+        border-radius: 1rem;
+        margin-right: auto;
+        max-width: 80%;
+    }
+    
+    .typing-indicator.show {
+        display: block;
+    }
+    
+    .typing-dots {
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .typing-dots span {
+        height: 8px;
+        width: 8px;
+        background-color: #6c757d;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 0 2px;
+        animation: typing 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+    
+    @keyframes typing {
+        0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+        40% { transform: scale(1); opacity: 1; }
+    }
+    
+    .input-group {
+        position: sticky;
+        bottom: 0;
+        background-color: white;
+        padding-top: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div x-data="chat()" x-init="init()">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h2 mb-3">
+                <i class="bi bi-chat-dots text-info"></i>
+                Claude AI Assistant
+            </h1>
+            <p class="text-muted">
+                Chat with Claude AI about your PropellerAds campaigns, get insights, and manage your advertising
+            </p>
+        </div>
+    </div>
+
+    <!-- Chat Status -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="alert" :class="claudeStatus ? 'alert-success' : 'alert-warning'">
+                <i class="bi" :class="claudeStatus ? 'bi-check-circle' : 'bi-exclamation-triangle'"></i>
+                <span x-text="claudeStatus ? 'Claude AI is ready to help!' : 'Claude AI is currently unavailable'"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <!-- Messages -->
+                    <div class="chat-container" id="chatContainer">
+                        <!-- Welcome Message -->
+                        <div class="message assistant" x-show="messages.length === 0">
+                            <div>
+                                <strong>Claude AI:</strong> Hello! I'm Claude, your AI assistant for PropellerAds. 
+                                I can help you with:
+                                <ul class="mt-2 mb-0">
+                                    <li>Analyzing campaign performance</li>
+                                    <li>Optimizing ad strategies</li>
+                                    <li>Understanding PropellerAds features</li>
+                                    <li>Troubleshooting issues</li>
+                                    <li>General advertising advice</li>
+                                </ul>
+                                What would you like to know?
+                            </div>
+                            <div class="message-time">Just now</div>
+                        </div>
+
+                        <!-- Chat Messages -->
+                        <template x-for="message in messages" :key="message.id">
+                            <div class="message" :class="message.role">
+                                <div x-html="formatMessage(message.content)"></div>
+                                <div class="message-time" x-text="formatTime(message.timestamp)"></div>
+                            </div>
+                        </template>
+
+                        <!-- Typing Indicator -->
+                        <div class="typing-indicator" :class="{ 'show': isTyping }">
+                            <div class="typing-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <span class="ms-2">Claude is typing...</span>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="p-3">
+                        <form @submit.prevent="sendMessage()">
+                            <div class="input-group">
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    placeholder="Type your message to Claude..."
+                                    x-model="currentMessage"
+                                    :disabled="!claudeStatus || isTyping"
+                                    maxlength="1000"
+                                >
+                                <button 
+                                    class="btn btn-primary" 
+                                    type="submit"
+                                    :disabled="!claudeStatus || isTyping || !currentMessage.trim()"
+                                >
+                                    <i class="bi bi-send" x-show="!isTyping"></i>
+                                    <span class="spinner-border spinner-border-sm" x-show="isTyping"></span>
+                                    <span x-show="!isTyping">Send</span>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Quick Actions -->
+                        <div class="mt-2">
+                            <small class="text-muted">Quick questions:</small>
+                            <div class="mt-1">
+                                <button class="btn btn-sm btn-outline-secondary me-1 mb-1" 
+                                        @click="sendQuickMessage('What is my current account balance?')"
+                                        :disabled="!claudeStatus || isTyping">
+                                    Check Balance
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary me-1 mb-1" 
+                                        @click="sendQuickMessage('Show me my active campaigns')"
+                                        :disabled="!claudeStatus || isTyping">
+                                    Show Campaigns
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary me-1 mb-1" 
+                                        @click="sendQuickMessage('How can I optimize my campaigns?')"
+                                        :disabled="!claudeStatus || isTyping">
+                                    Optimization Tips
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Alert -->
+    <div class="alert alert-danger mt-3" x-show="error" x-text="error"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function chat() {
+    return {
+        messages: [],
+        currentMessage: '',
+        isTyping: false,
+        claudeStatus: false,
+        error: null,
+        messageId: 1,
+
+        init() {
+            this.checkClaudeStatus();
+            this.loadChatHistory();
+        },
+
+        async checkClaudeStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                this.claudeStatus = data.claude || false;
+            } catch (error) {
+                console.error('Error checking Claude status:', error);
+                this.claudeStatus = false;
+            }
+        },
+
+        loadChatHistory() {
+            // Load from localStorage if available
+            const saved = localStorage.getItem('claude_chat_history');
+            if (saved) {
+                try {
+                    this.messages = JSON.parse(saved);
+                    this.messageId = Math.max(...this.messages.map(m => m.id), 0) + 1;
+                } catch (error) {
+                    console.error('Error loading chat history:', error);
+                }
+            }
+        },
+
+        saveChatHistory() {
+            try {
+                localStorage.setItem('claude_chat_history', JSON.stringify(this.messages));
+            } catch (error) {
+                console.error('Error saving chat history:', error);
+            }
+        },
+
+        async sendMessage() {
+            if (!this.currentMessage.trim() || this.isTyping || !this.claudeStatus) {
+                return;
+            }
+
+            const userMessage = this.currentMessage.trim();
+            this.currentMessage = '';
+            this.error = null;
+
+            // Add user message
+            this.addMessage('user', userMessage);
+
+            // Show typing indicator
+            this.isTyping = true;
+            this.scrollToBottom();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    this.addMessage('assistant', data.response);
+                } else {
+                    this.error = data.error || 'Failed to get response from Claude';
+                    this.addMessage('assistant', 'Sorry, I encountered an error. Please try again.');
+                }
+            } catch (error) {
+                this.error = 'Network error: ' + error.message;
+                this.addMessage('assistant', 'Sorry, I\'m having trouble connecting. Please check your internet connection and try again.');
+            } finally {
+                this.isTyping = false;
+                this.scrollToBottom();
+            }
+        },
+
+        sendQuickMessage(message) {
+            this.currentMessage = message;
+            this.sendMessage();
+        },
+
+        addMessage(role, content) {
+            this.messages.push({
+                id: this.messageId++,
+                role: role,
+                content: content,
+                timestamp: new Date().toISOString()
+            });
+            this.saveChatHistory();
+            this.$nextTick(() => this.scrollToBottom());
+        },
+
+        formatMessage(content) {
+            // Basic markdown-like formatting
+            return content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+        },
+
+        formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        },
+
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const container = document.getElementById('chatContainer');
+                if (container) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            });
+        },
+
+        clearChat() {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+                this.messages = [];
+                this.saveChatHistory();
+            }
+        }
+    }
+}
+</script>
+{% endblock %}
