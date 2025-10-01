@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     from propellerads.client import PropellerAdsClient
-    from claude_natural_interface_v2 import ClaudeNaturalInterface
+    from claude_natural_interface_v2 import EnhancedClaudeInterface
 except ImportError as e:
     print(f"Import error: {e}")
     print("Make sure you're running from the project root directory")
@@ -62,7 +62,7 @@ def initialize_clients():
     
     # Initialize Claude interface
     try:
-        claude_interface = ClaudeNaturalInterface()
+        claude_interface = EnhancedClaudeInterface()
         logger.info("Claude interface initialized successfully")
     except Exception as e:
         logger.warning(f"Claude interface not available: {e}")
@@ -89,7 +89,7 @@ def api_status():
         try:
             balance = propeller_client.get_balance()
             status['propellerads'] = True
-            status['balance'] = balance
+            status["balance"] = balance.amount
         except Exception as e:
             logger.error(f"PropellerAds API error: {e}")
             status['propellerads_error'] = str(e)
@@ -113,7 +113,7 @@ def get_balance():
     
     try:
         balance = propeller_client.get_balance()
-        return jsonify({'balance': balance, 'success': True})
+        return jsonify({'balance': balance.amount, 'success': True})
     except Exception as e:
         logger.error(f"Error getting balance: {e}")
         return jsonify({'error': str(e), 'success': False}), 500
