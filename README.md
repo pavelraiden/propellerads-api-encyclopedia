@@ -139,11 +139,172 @@ pytest tests/test_sdk_functionality.py -v   # Основная функцион�
 
 ### Пошаговая Установка
 
-**📋 Подробные инструкции для каждой ОС:**
-- **[Полное Руководство по Установке](INSTALL_GUIDE.md)** - детальные инструкции для Windows, macOS и Linux
+## 💻 Установка по Операционным Системам
+
+### 🪟 Windows
+
+#### Шаг 1: Установить Python
+```powershell
+# Скачать Python с официального сайта python.org
+# Или через Microsoft Store
+winget install Python.Python.3.11
+```
+
+#### Шаг 2: Установить Git
+```powershell
+winget install Git.Git
+```
+
+#### Шаг 3: Скачать и Установить SDK
+```powershell
+# Открыть PowerShell или Command Prompt
+git clone https://github.com/pavelraiden/propellerads-api-encyclopedia.git
+cd propellerads-api-encyclopedia
+
+# Установить зависимости
+pip install -r requirements.txt
+
+# Настроить API ключи
+set MainAPI=ваш-propellerads-api-ключ
+set ANTHROPIC_API_KEY=ваш-claude-api-ключ
+
+# Запустить
+python claude_natural_interface_v2.py
+```
+
+### 🍎 macOS
+
+#### Шаг 1: Установить Homebrew (если нет)
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+#### Шаг 2: Установить Python и Git
+```bash
+brew install python git
+```
+
+#### Шаг 3: Скачать и Установить SDK
+```bash
+# Открыть Terminal
+git clone https://github.com/pavelraiden/propellerads-api-encyclopedia.git
+cd propellerads-api-encyclopedia
+
+# Автоматическая установка
+chmod +x INSTALL.sh
+./INSTALL.sh
+
+# Или вручную
+pip3 install -r requirements.txt
+
+# Настроить API ключи
+export MainAPI="ваш-propellerads-api-ключ"
+export ANTHROPIC_API_KEY="ваш-claude-api-ключ"
+
+# Запустить
+python3 claude_natural_interface_v2.py
+```
+
+### 🐧 Linux (Ubuntu/Debian)
+
+#### Шаг 1: Обновить систему
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+#### Шаг 2: Установить Python и Git
+```bash
+sudo apt install python3 python3-pip git -y
+```
+
+#### Шаг 3: Скачать и Установить SDK
+```bash
+git clone https://github.com/pavelraiden/propellerads-api-encyclopedia.git
+cd propellerads-api-encyclopedia
+
+# Автоматическая установка
+chmod +x INSTALL.sh
+./INSTALL.sh
+
+# Настроить API ключи
+export MainAPI="ваш-propellerads-api-ключ"
+export ANTHROPIC_API_KEY="ваш-claude-api-ключ"
+
+# Добавить в ~/.bashrc для постоянного использования
+echo 'export MainAPI="ваш-propellerads-api-ключ"' >> ~/.bashrc
+echo 'export ANTHROPIC_API_KEY="ваш-claude-api-ключ"' >> ~/.bashrc
+source ~/.bashrc
+
+# Запустить
+python3 claude_natural_interface_v2.py
+```
+
+### 🐧 Linux (CentOS/RHEL/Fedora)
+
+#### Шаг 1: Установить Python и Git
+```bash
+# CentOS/RHEL
+sudo yum install python3 python3-pip git -y
+
+# Fedora
+sudo dnf install python3 python3-pip git -y
+```
+
+#### Шаг 2: Скачать и Установить SDK
+```bash
+git clone https://github.com/pavelraiden/propellerads-api-encyclopedia.git
+cd propellerads-api-encyclopedia
+./INSTALL.sh
+```
+
+## 🔑 Настройка API Ключей
+
+### Где Получить API Ключи
+
+#### 1. PropellerAds API Key (`MainAPI`)
+1. Войдите в ваш аккаунт PropellerAds
+2. Перейдите в раздел "API" или "Интеграции"
+3. Создайте новый API токен
+4. Скопируйте ключ
+
+#### 2. Claude AI API Key (`ANTHROPIC_API_KEY`)
+1. Зарегистрируйтесь на [console.anthropic.com](https://console.anthropic.com)
+2. Перейдите в раздел "API Keys"
+3. Создайте новый ключ
+4. Скопируйте ключ
+
+### Способы Настройки Ключей
+
+#### Вариант 1: Переменные Окружения (Рекомендуется)
+```bash
+# Linux/macOS
+export MainAPI="ваш-propellerads-api-ключ"
+export ANTHROPIC_API_KEY="ваш-claude-api-ключ"
+
+# Windows
+set MainAPI=ваш-propellerads-api-ключ
+set ANTHROPIC_API_KEY=ваш-claude-api-ключ
+```
+
+#### Вариант 2: Файл .env
+```bash
+# Создать файл .env в корне проекта
+echo "MainAPI=ваш-propellerads-api-ключ" > .env
+echo "ANTHROPIC_API_KEY=ваш-claude-api-ключ" >> .env
+```
+
+#### Вариант 3: Интерактивная Настройка
+При первом запуске программа автоматически попросит ввести ключи:
+```bash
+python claude_natural_interface_v2.py
+# Программа попросит ввести ключи если они не найдены
+```
+
+**📋 Дополнительные Руководства:**
+- **[Полное Руководство по Установке](INSTALL_GUIDE.md)** - еще больше деталей
 - **[Руководство по Решению Проблем](TROUBLESHOOTING.md)** - решения частых проблем
 
-**Краткая инструкция:**
+**Быстрый старт для опытных пользователей:**
 
 
 #### 1. Скачать Проект
