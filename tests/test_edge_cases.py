@@ -140,9 +140,9 @@ class TestExtremeLoadScenarios:
     @patch('requests.Session.request')
     def test_large_response_handling(self, mock_request):
         """Test handling of large API responses."""
-        # Create a large mock response
+        # Create a large mock response with correct PropellerAds structure
         large_response_data = {
-            "campaigns": [
+            "result": [
                 {
                     "id": i,
                     "name": f"Campaign {i}",
@@ -152,8 +152,14 @@ class TestExtremeLoadScenarios:
                         "conversions": i * 2
                     }
                 }
-                for i in range(1, 1001)  # 1000 campaigns
-            ]
+                for i in range(1, 101)  # 100 campaigns (first page)
+            ],
+            "meta": {
+                "total_items": 100,
+                "total_pages": 1,
+                "page_size": 100,
+                "page": 1
+            }
         }
         
         mock_response = Mock()
@@ -165,8 +171,10 @@ class TestExtremeLoadScenarios:
         
         campaigns = client.get_campaigns()
         
-        # Should handle large responses
-        assert len(campaigns["campaigns"]) == 1000
+        # Should handle large responses (now returns list directly)
+        assert len(campaigns) == 100
+        assert isinstance(campaigns, list)
+        assert campaigns[0]["id"] == 1
 
 
 class TestNetworkFailureScenarios:

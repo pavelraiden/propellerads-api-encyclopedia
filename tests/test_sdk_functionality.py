@@ -55,10 +55,9 @@ class TestPropellerAdsClient:
 
         result = self.client.get_campaigns()
 
-        assert isinstance(result, dict)
-        assert 'result' in result
-        assert len(result['result']) == 1
-        assert result['result'][0]['id'] == 1
+        assert isinstance(result, list)
+        assert len(result) == 1
+        assert result[0]['id'] == 1
 
     @patch('requests.Session.request')
     def test_health_check_success(self, mock_request):
