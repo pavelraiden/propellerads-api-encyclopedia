@@ -299,24 +299,64 @@ class PropellerAdsClient:
         
         return BalanceResponse(amount=amount)
     
-    def get_campaigns(self, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_campaigns(self, limit: int = 100, offset: int = 0, auto_paginate: bool = True) -> List[Dict[str, Any]]:
         """
-        Get campaigns list.
+        Get campaigns list with automatic pagination support.
         
         Args:
-            limit: Number of campaigns to return
-            offset: Offset for pagination
+            limit: Number of campaigns per page (max 100)
+            offset: Offset for pagination (used when auto_paginate=False)
+            auto_paginate: If True, automatically fetch all campaigns across all pages
             
         Returns:
             List[Dict]: List of campaigns
         """
-        params = {
-            'limit': limit,
-            'offset': offset
-        }
+        if not auto_paginate:
+            # Single page request
+            params = {
+                'limit': limit,
+                'offset': offset
+            }
+            response = self._make_request('GET', '/adv/campaigns', params=params)
+            response_data = response.json()
+            return response_data.get('result', [])
         
-        response = self._make_request('GET', '/adv/campaigns', params=params)
-        return response.json()
+        # Auto-pagination: fetch all campaigns
+        all_campaigns = []
+        current_offset = 0
+        page_size = min(limit, 100)  # API max is 100
+        
+        while True:
+            params = {
+                'limit': page_size,
+                'offset': current_offset
+            }
+            
+            response = self._make_request('GET', '/adv/campaigns', params=params)
+            response_data = response.json()
+            
+            campaigns = response_data.get('result', [])
+            if not campaigns:
+                break
+                
+            all_campaigns.extend(campaigns)
+            
+            # Check if we have more pages
+            meta = response_data.get('meta', {})
+            total_items = meta.get('total_items', 0)
+            
+            if len(all_campaigns) >= total_items:
+                break
+                
+            current_offset += page_size
+            
+            # Safety check to prevent infinite loops
+            if current_offset > 10000:  # Max 10k campaigns
+                logger.warning("⚠️ Reached maximum pagination limit (10k campaigns)")
+                break
+        
+        logger.info(f"📊 Loaded {len(all_campaigns)} campaigns across {(current_offset // page_size) + 1} pages")
+        return all_campaigns
     
     def get_statistics(
         self,
