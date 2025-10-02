@@ -6,7 +6,7 @@ python-dotenv>=1.0.0
 
 # AI and MCP integration
 anthropic>=0.25.0
-mcp>=1.0.0
+# mcp>=1.0.0  # Removed - not available in PyPI
 
 # Development and testing
 pytest>=7.0.0
