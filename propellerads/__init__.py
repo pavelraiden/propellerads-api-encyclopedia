@@ -7,9 +7,9 @@ Professional PropellerAds SSP API v5 client with enterprise features.
 import sys
 
 # Check Python version compatibility
-if sys.version_info < (3, 11):
+if sys.version_info < (3, 9):
     raise RuntimeError(
-        "PropellerAds SDK requires Python 3.11 or higher. "
+        "PropellerAds SDK requires Python 3.9 or higher. "
         f"Current version: {sys.version_info.major}.{sys.version_info.minor}"
     )
 

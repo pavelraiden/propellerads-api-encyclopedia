@@ -54,7 +54,12 @@ class EnhancedClaudeInterface:
         # Show current balance
         print("💰 Баланс: Загружается...")
         try:
-            balance_result = asyncio.run(self.integration.get_balance())
+            # Fix asyncio.run in sync context
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            balance_result = loop.run_until_complete(self.integration.get_balance())
+            loop.close()
+            
             if balance_result['success']:
                 print(f"💰 Текущий баланс: {balance_result['balance']['formatted']}")
             else:
