@@ -146,3 +146,5 @@ tmp/
 logs/
 test_results/
 monitoring_results_*.json
+__pycache__/
+*.pyc
