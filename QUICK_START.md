@@ -22,13 +22,28 @@ ANTHROPIC_API_KEY=your_claude_api_key_here
 
 ### 3. 🖱️ Launch Application
 
-**Windows:** Double-click `launch_app.bat`  
-**macOS/Linux:** Double-click `launch_app.sh` or run `./launch_app.sh`  
-**Any OS:** Run `python3 launch_app.py`
+**🎯 Recommended (Unified Interface):**
+```bash
+python3 simple_app.py
+```
+
+**🖱️ One-Click Launchers:**
+- **Windows:** Double-click `launch_app.bat`  
+- **macOS/Linux:** Double-click `launch_app.sh` or run `./launch_app.sh`  
+- **Any OS:** Run `python3 launch_app.py`
+
+**📚 Advanced Interface:**
+```bash
+cd web_interface && python3 app.py
+```
 
 ### 4. 🌐 Use the App
-- **Dashboard:** http://127.0.0.1:5000/
-- **AI Chat:** http://127.0.0.1:5000/chat
+
+**🎯 Unified Dashboard (Recommended):**
+- **URL:** Shown in console when app starts (usually http://127.0.0.1:5000)
+- **Everything in one place** - Dashboard, Chat, Campaigns, Statistics
+- **Claude AI Chat** built-in and working
+- **Real-time updates** automatic
 
 ## 💡 Features
 - ✅ **One-click launch** - No command line needed
