@@ -219,4 +219,4 @@ if __name__ == '__main__':
     print(f"💡 Everything is now in one place!")
     print(f"🔧 Debug mode: {'ON' if config['debug'] else 'OFF'}")
     
-    app.run(**config)
+    app.run(threaded=True, **config)

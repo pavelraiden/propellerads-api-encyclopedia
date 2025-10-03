@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 """
 Claude MCP Integration with PropellerAds API
@@ -14,6 +15,7 @@ from datetime import datetime, timedelta
 
 from propellerads.client import PropellerAdsClient
 from propellerads.exceptions import PropellerAdsError
+from anthropic import AsyncAnthropic
 
 
 class ClaudePropellerAdsIntegration:
@@ -30,7 +32,7 @@ class ClaudePropellerAdsIntegration:
     
     def __init__(self):
         """Initialize the Claude-PropellerAds integration."""
-        self.api_key = os.environ.get('MainAPI')
+        self.api_key = os.environ.get("MainAPI")
         if not self.api_key:
             raise ValueError("PropellerAds API key not found in environment variable 'MainAPI'")
         
@@ -40,6 +42,8 @@ class ClaudePropellerAdsIntegration:
             max_retries=3,
             rate_limit=60
         )
+        
+        self.anthropic_client = AsyncAnthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
         
         # System prompt for Claude
         self.system_prompt = self._create_system_prompt()
@@ -418,39 +422,9 @@ async def handle_mcp_request(method: str, params: Dict[str, Any]) -> Dict[str, A
             "success": False,
             "error": f"Unknown method: {method}",
             "available_methods": [
-                "get_balance", "get_campaigns", "get_campaign_details",
+                "get_balance", "get_campaigns", "get_campaign_details", 
                 "get_statistics", "get_targeting_options", "get_user_profile",
                 "analyze_campaign_performance", "get_account_overview"
             ]
         }
 
-
-# CLI Interface for testing
-async def main():
-    """Main function for testing the integration."""
-    integration = ClaudePropellerAdsIntegration()
-    
-    print("🚀 Claude-PropellerAds Integration Test")
-    print("=" * 50)
-    
-    # Test balance
-    print("\n📊 Testing Balance Check...")
-    balance_result = await integration.get_balance()
-    print(f"Result: {balance_result['message']}")
-    
-    # Test campaigns
-    print("\n📋 Testing Campaigns List...")
-    campaigns_result = await integration.get_campaigns(limit=5)
-    print(f"Result: {campaigns_result['message']}")
-    
-    # Test account overview
-    print("\n🏠 Testing Account Overview...")
-    overview_result = await integration.get_account_overview()
-    print(f"Result: {overview_result['message']}")
-    
-    print("\n✅ Integration test completed!")
-    print(f"System prompt length: {len(integration.system_prompt)} characters")
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

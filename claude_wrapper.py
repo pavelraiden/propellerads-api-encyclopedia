@@ -7,6 +7,7 @@ Provides a simple synchronous interface for the web application
 import asyncio
 from claude_natural_interface_v2 import EnhancedClaudeInterface
 from claude_advanced_system_prompt import CLAUDE_ADVANCED_SYSTEM_PROMPT
+from checklist_manager import checklist_manager, create_campaign_checklist, create_optimization_checklist
 
 
 class ClaudeWebWrapper:
@@ -83,4 +84,16 @@ class ClaudeWebWrapper:
     
     def get_campaigns(self) -> str:
         """Quick campaigns overview"""
-        return self.process_message("покажи мои кампании")
+        return self.process_message("покажи кампании")
+    
+    def create_campaign_checklist(self) -> str:
+        """Create a campaign creation checklist"""
+        checklist_id = create_campaign_checklist()
+        prompt = checklist_manager.generate_claude_checklist_prompt(checklist_id)
+        return f"📋 Создан чеклист для создания кампании (ID: {checklist_id})<br><br>{prompt.replace(chr(10), '<br>')}"
+    
+    def create_optimization_checklist(self) -> str:
+        """Create a campaign optimization checklist"""
+        checklist_id = create_optimization_checklist()
+        prompt = checklist_manager.generate_claude_checklist_prompt(checklist_id)
+        return f"📋 Создан чеклист для оптимизации кампании (ID: {checklist_id})<br><br>{prompt.replace(chr(10), '<br>')}"
