@@ -19,6 +19,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     from propellerads.client import PropellerAdsClient
     from claude_wrapper import ClaudeWebWrapper
+    from propellerads_api_service import PropellerAdsAPIService
+    from claude_enhanced_interface import EnhancedClaudeInterface
 except ImportError as e:
     print(f"Import error: {e}")
     print("Make sure you're running from the project root directory")
@@ -35,10 +37,12 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24).hex())
 # Global clients
 propeller_client = None
 claude_interface = None
+api_service = None
+enhanced_claude = None
 
 def initialize_clients():
     """Initialize PropellerAds and Claude clients"""
-    global propeller_client, claude_interface
+    global propeller_client, claude_interface, api_service, enhanced_claude
     
     # Initialize PropellerAds client
     api_key = os.environ.get('MainAPI')
@@ -48,6 +52,12 @@ def initialize_clients():
     
     try:
         propeller_client = PropellerAdsClient(api_key=api_key)
+        
+        # Initialize enhanced API service
+        api_service = PropellerAdsAPIService(api_key=api_key)
+        
+        # Initialize enhanced Claude interface
+        enhanced_claude = EnhancedClaudeInterface(api_service=api_service)
         logger.info("PropellerAds client initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize PropellerAds client: {e}")
@@ -145,13 +155,14 @@ def get_statistics():
 
 @app.route('/api/chat', methods=['POST'])
 def chat_with_claude():
-    """Chat with Claude AI"""
-    if not claude_interface:
-        return jsonify({'error': 'Claude interface not available'}), 500
+    """Chat with Claude AI using enhanced interface"""
+    if not enhanced_claude:
+        return jsonify({'error': 'Enhanced Claude interface not available'}), 500
     
     try:
         data = request.get_json()
         message = data.get('message', '')
+        context = data.get('context', {})
         
         if not message:
             return jsonify({'error': 'Message is required'}), 400
@@ -166,11 +177,15 @@ def chat_with_claude():
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
                 
-                # Get response from Claude
-                response = claude_interface.process_message(message)
+                # Set context if provided
+                if context:
+                    enhanced_claude.set_context(context)
+                
+                # Get response from enhanced Claude
+                response = loop.run_until_complete(enhanced_claude.process_message(message))
                 return response
             except Exception as e:
-                logger.error(f"Claude processing error: {e}")
+                logger.error(f"Enhanced Claude processing error: {e}")
                 return f"Sorry, I encountered an error: {str(e)}"
             finally:
                 try:
@@ -187,7 +202,7 @@ def chat_with_claude():
             'timestamp': datetime.now().isoformat()
         })
     except Exception as e:
-        logger.error(f"Error in Claude chat: {e}")
+        logger.error(f"Error in enhanced Claude chat: {e}")
         return jsonify({'error': str(e), 'success': False}), 500
 
 @app.errorhandler(404)

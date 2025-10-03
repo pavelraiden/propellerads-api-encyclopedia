@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     from propellerads.client import PropellerAdsClient
-    from claude_natural_interface_v2 import EnhancedClaudeInterface
+    from claude_enhanced_interface import EnhancedClaudeInterface
 except ImportError as e:
     print(f"Import error: {e}")
     print("Make sure you're running from the project root directory")

@@ -277,9 +277,36 @@
                                                 </td>
                                                 <td x-text="formatCurrency(campaign.budget)"></td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-outline-primary" @click="viewCampaign(campaign.id)">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </button>
+                                                    <div class="btn-group" role="group">
+                                                        <!-- Start/Stop Campaign -->
+                                                        <button class="btn btn-sm" 
+                                                                :class="campaign.status === 'active' ? 'btn-outline-warning' : 'btn-outline-success'"
+                                                                @click="toggleCampaignStatus(campaign.id, campaign.status)"
+                                                                :title="campaign.status === 'active' ? 'Pause Campaign' : 'Start Campaign'">
+                                                            <i :class="campaign.status === 'active' ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
+                                                        </button>
+                                                        
+                                                        <!-- Edit Campaign (opens chat with context) -->
+                                                        <button class="btn btn-sm btn-outline-primary" 
+                                                                @click="editCampaign(campaign.id, campaign.name)"
+                                                                title="Edit Campaign">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        
+                                                        <!-- Zone Management -->
+                                                        <button class="btn btn-sm btn-outline-info" 
+                                                                @click="manageCampaignZones(campaign.id, campaign.name)"
+                                                                title="Manage Zones">
+                                                            <i class="bi bi-geo-alt"></i>
+                                                        </button>
+                                                        
+                                                        <!-- View Details -->
+                                                        <button class="btn btn-sm btn-outline-secondary" 
+                                                                @click="viewCampaign(campaign.id)"
+                                                                title="View Details">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </template>
@@ -533,10 +560,131 @@
                     }
                 },
 
+                async toggleCampaignStatus(campaignId, currentStatus) {
+                    const action = currentStatus === 'active' ? 'pause' : 'start';
+                    const actionText = action === 'pause' ? 'Pausing' : 'Starting';
+                    
+                    // Switch to chat and send command
+                    this.activeTab = 'chat';
+                    
+                    // Add context message to chat
+                    const contextMessage = `${actionText} campaign ${campaignId}...`;
+                    this.chatMessages.push({
+                        id: Date.now(),
+                        type: 'user',
+                        content: contextMessage,
+                        timestamp: new Date().toLocaleTimeString()
+                    });
+                    
+                    this.chatLoading = true;
+                    
+                    try {
+                        const response = await fetch('/api/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                message: `${action} campaign ${campaignId}`,
+                                context: { campaign_id: campaignId, action: action }
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            this.chatMessages.push({
+                                id: Date.now() + 1,
+                                type: 'assistant',
+                                content: data.response,
+                                timestamp: new Date().toLocaleTimeString()
+                            });
+                            
+                            // Refresh campaigns list
+                            await this.loadCampaigns();
+                        } else {
+                            this.chatMessages.push({
+                                id: Date.now() + 1,
+                                type: 'assistant',
+                                content: 'Error: ' + (data.error || 'Failed to update campaign status'),
+                                timestamp: new Date().toLocaleTimeString()
+                            });
+                        }
+                    } catch (error) {
+                        this.chatMessages.push({
+                            id: Date.now() + 1,
+                            type: 'assistant',
+                            content: 'Network error while updating campaign status.',
+                            timestamp: new Date().toLocaleTimeString()
+                        });
+                    } finally {
+                        this.chatLoading = false;
+                        this.$nextTick(() => {
+                            const container = document.getElementById('chatContainer');
+                            container.scrollTop = container.scrollHeight;
+                        });
+                    }
+                },
+
+                editCampaign(campaignId, campaignName) {
+                    // Switch to chat with campaign context
+                    this.activeTab = 'chat';
+                    
+                    // Set chat input with edit command
+                    this.chatInput = `Edit campaign ${campaignId} (${campaignName || 'Unnamed'})`;
+                    
+                    // Add context message
+                    this.chatMessages.push({
+                        id: Date.now(),
+                        type: 'user',
+                        content: `🔧 **Editing Campaign ${campaignId}**<br>Campaign: ${campaignName || 'Unnamed'}<br><br>What would you like to modify?`,
+                        timestamp: new Date().toLocaleTimeString()
+                    });
+                    
+                    // Focus on input
+                    this.$nextTick(() => {
+                        const textarea = document.querySelector('textarea');
+                        if (textarea) textarea.focus();
+                    });
+                },
+
+                manageCampaignZones(campaignId, campaignName) {
+                    // Switch to chat with zone management context
+                    this.activeTab = 'chat';
+                    
+                    // Set chat input with zone management command
+                    this.chatInput = `Analyze zones for campaign ${campaignId}`;
+                    
+                    // Add context message
+                    this.chatMessages.push({
+                        id: Date.now(),
+                        type: 'user',
+                        content: `🎯 **Zone Management for Campaign ${campaignId}**<br>Campaign: ${campaignName || 'Unnamed'}<br><br>Available actions:<br>• Block/unblock zones<br>• Set zone-specific rates<br>• Analyze zone performance<br>• Auto-optimize zones<br><br>What would you like to do?`,
+                        timestamp: new Date().toLocaleTimeString()
+                    });
+                    
+                    // Focus on input
+                    this.$nextTick(() => {
+                        const textarea = document.querySelector('textarea');
+                        if (textarea) textarea.focus();
+                    });
+                },
+
                 viewCampaign(campaignId) {
-                    this.activeTab = 'campaigns';
-                    // TODO: Implement campaign details view
-                    alert(`Viewing campaign ${campaignId} - Feature coming soon!`);
+                    // Switch to chat and request campaign details
+                    this.activeTab = 'chat';
+                    
+                    // Set chat input with view command
+                    this.chatInput = `Show details for campaign ${campaignId}`;
+                    
+                    // Add context message
+                    this.chatMessages.push({
+                        id: Date.now(),
+                        type: 'user',
+                        content: `📊 **Campaign Details Request**<br>Campaign ID: ${campaignId}<br><br>Loading detailed information...`,
+                        timestamp: new Date().toLocaleTimeString()
+                    });
+                    
+                    // Auto-send the message
+                    this.sendMessage();
                 },
 
                 formatCurrency(amount) {

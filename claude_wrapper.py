@@ -5,7 +5,7 @@ Provides a simple synchronous interface for the web application
 """
 
 import asyncio
-from claude_natural_interface_v2 import EnhancedClaudeInterface
+from claude_enhanced_interface import EnhancedClaudeInterface
 from claude_advanced_system_prompt import CLAUDE_ADVANCED_SYSTEM_PROMPT
 from checklist_manager import checklist_manager, create_campaign_checklist, create_optimization_checklist
 
