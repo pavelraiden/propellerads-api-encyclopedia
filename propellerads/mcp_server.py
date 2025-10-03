@@ -18,21 +18,43 @@ from pathlib import Path
 # Add src to path for imports
 sys.path.append(str(Path(__file__).parent))
 
-from mcp.server import Server
-from mcp.types import (
-    Resource,
-    Tool,
-    TextContent,
-    ImageContent,
-    EmbeddedResource,
-    LoggingLevel
-)
-import mcp.server.stdio
+# Optional MCP imports - only available if mcp package is installed
+try:
+    from mcp.server import Server
+    from mcp.types import (
+        Resource,
+        Tool,
+        TextContent,
+        ImageContent,
+        EmbeddedResource,
+        LoggingLevel
+    )
+    import mcp.server.stdio
+    MCP_AVAILABLE = True
+except ImportError:
+    # MCP not available - define dummy classes for compatibility
+    MCP_AVAILABLE = False
+    class Server:
+        def __init__(self, name): pass
+    class Resource: pass
+    class Tool: pass
+    class TextContent: pass
+    class ImageContent: pass
+    class EmbeddedResource: pass
+    class LoggingLevel: pass
 from dotenv import load_dotenv
 
 sys.path.append(str(Path(__file__).parent.parent))
 from propellerads.client import PropellerAdsClient as PropellerAdsUltimateClient
-from src.ai_interface import PropellerAdsAIInterface
+# Optional AI interface import
+try:
+    from src.ai_interface import PropellerAdsAIInterface
+except ImportError:
+    # AI interface not available - create dummy class
+    class PropellerAdsAIInterface:
+        def __init__(self, *args, **kwargs): pass
+        async def process_natural_language(self, *args, **kwargs): 
+            return {"error": "AI interface not available"}
 
 # Load environment variables
 load_dotenv()
@@ -612,6 +634,10 @@ class PropellerAdsMCPServer:
     
     async def run(self):
         """Run the MCP server"""
+        if not MCP_AVAILABLE:
+            logger.error("MCP package not available. Install with: pip install mcp")
+            return
+            
         logger.info("Starting PropellerAds Enterprise MCP Server...")
         async with mcp.server.stdio.stdio_server() as (read_stream, write_stream):
             await self.server.run(
