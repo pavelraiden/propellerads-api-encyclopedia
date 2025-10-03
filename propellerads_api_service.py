@@ -118,6 +118,9 @@ class PropellerAdsAPIService:
             # Prepare campaign data according to PropellerAds schema
             prepared_data = self._prepare_campaign_data(campaign_data)
             
+            # Debug logging
+            logger.info(f"Creating campaign with prepared data: {prepared_data}")
+            
             # Create campaign via API
             result = self.client.create_campaign(prepared_data)
             
@@ -752,14 +755,19 @@ class PropellerAdsAPIService:
     
     def _prepare_campaign_data(self, campaign_data: Dict[str, Any]) -> Dict[str, Any]:
         """Prepare campaign data according to PropellerAds API schema"""
-        # Set default values and format according to API requirements
-        start_date = datetime.now().strftime('%d/%m/%Y')
-        end_date = (datetime.now() + timedelta(days=30)).strftime('%d/%m/%Y')
+        # Set default values and format according to API requirements (ISO format)
+        start_date = datetime.now().strftime('%Y-%m-%d')
+        end_date = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')
+        
+        # Fix rate_model for CPA Goal campaigns
+        rate_model = campaign_data.get('rate_model', 'cpm')
+        if rate_model.lower() in ['cpa', 'cpa_goal', 'cpa goal']:
+            rate_model = 'scpa'  # Smart CPA for PropellerAds API
         
         prepared_data = {
             'name': campaign_data.get('name'),
             'direction': campaign_data.get('direction', 'onclick'),
-            'rate_model': campaign_data.get('rate_model', 'cpm'),
+            'rate_model': rate_model,
             'target_url': campaign_data.get('target_url'),
             'status': campaign_data.get('status', 1),  # Draft by default
             'started_at': campaign_data.get('started_at', start_date),
@@ -767,6 +775,11 @@ class PropellerAdsAPIService:
             'timezone': campaign_data.get('timezone', 0),  # UTC
             'allow_zone_update': campaign_data.get('allow_zone_update', True)
         }
+        
+        # Add required fields for CPA campaigns
+        if rate_model == 'scpa':
+            prepared_data['daily_amount'] = campaign_data.get('daily_amount', 50)
+            prepared_data['total_amount'] = campaign_data.get('total_amount', 1000)
         
         # Add optional fields based on campaign type
         if campaign_data.get('frequency'):
@@ -780,13 +793,88 @@ class PropellerAdsAPIService:
         if campaign_data.get('is_adblock_buy') is not None:
             prepared_data['is_adblock_buy'] = campaign_data['is_adblock_buy']
         
-        # Add targeting
-        if campaign_data.get('targeting'):
-            prepared_data['targeting'] = campaign_data['targeting']
+        # Prepare targeting in correct PropellerAds format
+        targeting = {}
+        raw_targeting = campaign_data.get('targeting', {})
         
-        # Add rates
+        # Country targeting
+        if raw_targeting.get('countries'):
+            countries = raw_targeting['countries']
+            if isinstance(countries, str):
+                countries = [countries.lower()]
+            elif isinstance(countries, list):
+                countries = [c.lower() for c in countries]
+            targeting['country'] = {
+                'list': countries,
+                'is_excluded': False
+            }
+        
+        # OS targeting
+        if raw_targeting.get('os'):
+            os_list = raw_targeting['os']
+            if isinstance(os_list, str):
+                os_list = [os_list.lower()]
+            elif isinstance(os_list, list):
+                os_list = [os.lower() for os in os_list]
+            targeting['os'] = {
+                'list': os_list,
+                'is_excluded': False
+            }
+        
+        # OS Type targeting (mobile/desktop)
+        if raw_targeting.get('os_type'):
+            os_type = raw_targeting['os_type']
+            if isinstance(os_type, str):
+                os_type = [os_type.lower()]
+            targeting['os_type'] = {
+                'list': os_type,
+                'is_excluded': False
+            }
+        
+        # Connection type
+        if raw_targeting.get('connection'):
+            targeting['connection'] = raw_targeting['connection'].lower()
+        
+        # Zone blacklist
+        if raw_targeting.get('blocked_zones'):
+            blocked_zones = raw_targeting['blocked_zones']
+            if isinstance(blocked_zones, str):
+                # Parse comma-separated string
+                blocked_zones = [int(z.strip()) for z in blocked_zones.split(',') if z.strip().isdigit()]
+            elif isinstance(blocked_zones, list):
+                blocked_zones = [int(z) for z in blocked_zones if str(z).isdigit()]
+            
+            if blocked_zones:
+                targeting['zone'] = {
+                    'list': blocked_zones,
+                    'is_excluded': True  # Blacklist
+                }
+        
+        # Audience exclusions
+        if raw_targeting.get('excluded_audiences'):
+            excluded_audiences = raw_targeting['excluded_audiences']
+            if isinstance(excluded_audiences, str):
+                excluded_audiences = [excluded_audiences]
+            targeting['traffic_categories'] = excluded_audiences
+        
+        if targeting:
+            prepared_data['targeting'] = targeting
+        
+        # Add rates in correct format (REQUIRED for CPA campaigns)
         if campaign_data.get('rates'):
             prepared_data['rates'] = campaign_data['rates']
+        else:
+            # Default rates - REQUIRED for all campaigns
+            countries = []
+            if targeting.get('country') and targeting['country'].get('list'):
+                countries = targeting['country']['list']
+            else:
+                countries = ['br']  # Default to Brazil if no country specified
+            
+            prepared_data['rates'] = [{
+                'countries': countries,
+                'amount': campaign_data.get('default_rate', 0.5)
+            }]
         
         # Add creatives for push campaigns
         if campaign_data.get('creatives'):
