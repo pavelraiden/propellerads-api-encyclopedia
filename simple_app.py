@@ -156,8 +156,30 @@ def chat_with_claude():
         if not message:
             return jsonify({'error': 'Message is required'}), 400
         
-        # Get response from Claude
-        response = claude_interface.process_message(message)
+        # Fix event loop issue by running in thread-safe way
+        import asyncio
+        import threading
+        
+        def run_claude_in_thread():
+            try:
+                # Create new event loop for this thread
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                
+                # Get response from Claude
+                response = claude_interface.process_message(message)
+                return response
+            except Exception as e:
+                logger.error(f"Claude processing error: {e}")
+                return f"Sorry, I encountered an error: {str(e)}"
+            finally:
+                try:
+                    loop.close()
+                except:
+                    pass
+        
+        # Run Claude in separate thread to avoid event loop conflicts
+        response = run_claude_in_thread()
         
         return jsonify({
             'response': response,

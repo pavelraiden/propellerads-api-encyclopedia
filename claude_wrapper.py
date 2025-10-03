@@ -6,6 +6,7 @@ Provides a simple synchronous interface for the web application
 
 import asyncio
 from claude_natural_interface_v2 import EnhancedClaudeInterface
+from claude_advanced_system_prompt import CLAUDE_ADVANCED_SYSTEM_PROMPT
 
 
 class ClaudeWebWrapper:
@@ -15,6 +16,8 @@ class ClaudeWebWrapper:
         self.interface = EnhancedClaudeInterface()
         self.loop = None
         self.conversation_context = {}  # Store conversation context
+        self.system_prompt = CLAUDE_ADVANCED_SYSTEM_PROMPT
+        self.first_interaction = True  # Track first interaction to avoid duplicate welcome
     
     def process_message(self, message: str) -> str:
         """Process a single message and return response"""
