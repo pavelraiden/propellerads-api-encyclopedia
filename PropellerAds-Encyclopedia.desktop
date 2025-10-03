@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=PropellerAds API Encyclopedia
+Comment=AI-powered PropellerAds API management tool
+Exec=/usr/bin/python3 %k/launch_app.py
+Icon=%k/icon.png
+Path=%k
+Terminal=false
+StartupNotify=true
+Categories=Development;Network;Office;
