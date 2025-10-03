@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 try:
     from propellerads.client import PropellerAdsClient
-    from claude_natural_interface_v2 import EnhancedClaudeInterface
+    from claude_wrapper import ClaudeWebWrapper
 except ImportError as e:
     print(f"Import error: {e}")
     print("Make sure you're running from the project root directory")
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__, template_folder='web_interface/templates')
-app.config['SECRET_KEY'] = 'simple-secret-key'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24).hex())
 
 # Global clients
 propeller_client = None
@@ -55,7 +55,7 @@ def initialize_clients():
     
     # Initialize Claude interface
     try:
-        claude_interface = EnhancedClaudeInterface()
+        claude_interface = ClaudeWebWrapper()
         logger.info("Claude interface initialized successfully")
     except Exception as e:
         logger.warning(f"Claude interface not available: {e}")
@@ -157,7 +157,7 @@ def chat_with_claude():
             return jsonify({'error': 'Message is required'}), 400
         
         # Get response from Claude
-        response = claude_interface.chat(message)
+        response = claude_interface.process_message(message)
         
         return jsonify({
             'response': response,
@@ -185,12 +185,16 @@ if __name__ == '__main__':
         print("Warning: Some clients failed to initialize")
         print("Make sure MainAPI and ANTHROPIC_API_KEY environment variables are set")
     
-    # Run the application
-    port = int(os.environ.get('PORT', 5000))
-    host = os.environ.get('HOST', '127.0.0.1')
+    # Configuration
+    config = {
+        'host': os.environ.get('HOST', '127.0.0.1'),
+        'port': int(os.environ.get('PORT', 5000)),
+        'debug': os.environ.get('DEBUG', 'False').lower() == 'true'
+    }
     
-    print(f"🚀 Starting PropellerAds Unified Interface on {host}:{port}")
-    print(f"📊 Dashboard: http://{host}:{port}/")
+    print(f"🚀 Starting PropellerAds Unified Interface on {config['host']}:{config['port']}")
+    print(f"📊 Dashboard: http://{config['host']}:{config['port']}/")
     print(f"💡 Everything is now in one place!")
+    print(f"🔧 Debug mode: {'ON' if config['debug'] else 'OFF'}")
     
-    app.run(host=host, port=port, debug=False)
+    app.run(**config)
