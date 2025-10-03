@@ -230,9 +230,23 @@ class PropellerAdsClient:
             if 'errors' in error_data:
                 if isinstance(error_data['errors'], list):
                     message = '; '.join(error_data['errors'])
+                elif isinstance(error_data['errors'], dict):
+                    # Handle field-specific errors
+                    error_details = []
+                    for field, field_errors in error_data['errors'].items():
+                        if isinstance(field_errors, list):
+                            error_details.append(f"{field}: {', '.join(field_errors)}")
+                        else:
+                            error_details.append(f"{field}: {field_errors}")
+                    message = '; '.join(error_details)
+            
+            # Add full response for debugging
+            print(f"DEBUG API Response: {response.text}")
+            
         except:
             message = response.text or f"HTTP {response.status_code} error"
             error_data = None
+            print(f"DEBUG Raw Response: {response.text}")
         
         # Create appropriate exception
         if response.status_code == 401:

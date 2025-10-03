@@ -14,6 +14,7 @@ class ClaudeWebWrapper:
     def __init__(self):
         self.interface = EnhancedClaudeInterface()
         self.loop = None
+        self.conversation_context = {}  # Store conversation context
     
     def process_message(self, message: str) -> str:
         """Process a single message and return response"""
@@ -23,23 +24,55 @@ class ClaudeWebWrapper:
                 self.loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(self.loop)
             
-            # Extract intent and parameters
+            # Update conversation context with user message
+            if 'messages' not in self.conversation_context:
+                self.conversation_context['messages'] = []
+            
+            self.conversation_context['messages'].append({
+                'role': 'user',
+                'content': message,
+                'timestamp': asyncio.get_event_loop().time()
+            })
+            
+            # Extract intent and parameters with context
             intent_data = self.interface._extract_intent_and_params(message)
             intent = intent_data['intent']
             params = intent_data['params']
+            
+            # Add conversation context to params
+            params['conversation_context'] = self.conversation_context
             
             # Process with intelligence (async)
             response = self.loop.run_until_complete(
                 self.interface._process_intent_with_intelligence(intent, params)
             )
             
-            # Add to conversation history
+            # Add response to context
+            self.conversation_context['messages'].append({
+                'role': 'assistant', 
+                'content': response,
+                'timestamp': asyncio.get_event_loop().time()
+            })
+            
+            # Keep only last 10 messages to avoid memory issues
+            if len(self.conversation_context['messages']) > 10:
+                self.conversation_context['messages'] = self.conversation_context['messages'][-10:]
+            
+            # Add to interface conversation history
             self.interface.add_to_conversation_history(message, response)
             
             return response
             
         except Exception as e:
-            return f"Извините, произошла ошибка при обработке вашего сообщения: {str(e)}"
+            error_msg = f"Извините, произошла ошибка при обработке вашего сообщения: {str(e)}"
+            # Add error to context
+            if 'messages' in self.conversation_context:
+                self.conversation_context['messages'].append({
+                    'role': 'system',
+                    'content': f"Error: {str(e)}",
+                    'timestamp': asyncio.get_event_loop().time()
+                })
+            return error_msg
     
     def get_balance(self) -> str:
         """Quick balance check"""
