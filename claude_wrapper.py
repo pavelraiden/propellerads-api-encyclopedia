@@ -64,7 +64,7 @@ class ClaudeWebWrapper:
             # Add to interface conversation history
             self.interface.add_to_conversation_history(message, response)
             
-            return response
+            return response.replace('\n', '<br>')
             
         except Exception as e:
             error_msg = f"Извините, произошла ошибка при обработке вашего сообщения: {str(e)}"

@@ -208,7 +208,7 @@
                                         <template x-for="message in chatMessages" :key="message.id">
                                             <div class="message" :class="message.type">
                                                 <strong x-text="message.type === 'user' ? 'You' : 'Claude'"></strong>
-                                                <div x-text="message.content"></div>
+                                                <div x-html="message.content"></div>
                                                 <small class="text-muted" x-text="message.timestamp"></small>
                                             </div>
                                         </template>
