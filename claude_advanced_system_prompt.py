@@ -323,9 +323,9 @@ def get_advanced_system_prompt() -> str:
 def get_model_configuration() -> dict:
     """Get optimal model configuration for PropellerAds tasks"""
     return {
-        "model": "claude-3-opus-20240229",  # Use the most powerful model for best model
-        "max_tokens": 4096,
-        "temperature": 0.7,  # Balanced creativity and accuracy
+        "model": "claude-3-5-sonnet-20241022",  # Latest and most advanced Claude model
+        "max_tokens": 8192,  # Increased for better responses
+        "temperature": 0.3,  # Lower for more consistent, professional responses
         "top_p": 0.9,
         "system": CLAUDE_ADVANCED_SYSTEM_PROMPT
     }
