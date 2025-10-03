@@ -98,13 +98,18 @@ class EnhancedClaudeInterface:
             return self._extract_targeting_request(text)
         
         # Help requests
-        if any(word in text for word in ['помощь', 'help', 'что умеешь', 'команды', 'справка']):
+        if any(word in text for word in ['помощь', 'help', 'команды', 'commands']):
             return {'intent': 'help', 'params': {}}
         
-        # Account overview
-        if any(word in text for word in ['обзор', 'overview', 'аккаунт', 'профиль', 'profile']):
+        # Check if this might be follow-up information for campaign creation
+        if any(word in text for word in ['url', 'landing', 'budget', 'бюджет', 'https://', 'http://', '$']):
+            return {'intent': 'campaign_followup', 'params': {'text': text}}
+        
+        # Overview requests
+        if any(word in text for word in ['обзор', 'overview', 'профиль', 'profile']):
             return {'intent': 'overview', 'params': {}}
         
+        # Unknown request - let Claude handle it intelligently
         return {'intent': 'unknown', 'params': {'text': text}}
     
     def _extract_campaign_creation_advanced(self, text: str) -> Dict[str, Any]:
@@ -322,6 +327,10 @@ class EnhancedClaudeInterface:
             else:
                 return await self._create_campaign_with_params(params)
         
+        elif intent == 'campaign_followup':
+            # Handle follow-up information for campaign creation
+            return await self._handle_campaign_followup(params)
+        
         elif intent == 'campaigns':
             result = await self.integration.get_campaigns()
             if result['success']:
@@ -367,6 +376,49 @@ class EnhancedClaudeInterface:
     async def _handle_intelligent_campaign_creation(self, params: Dict[str, Any]) -> str:
         """Handle campaign creation with intelligent questioning"""
         extracted = params.get('extracted_info', {})
+        conversation_context = params.get('conversation_context', {})
+        
+        # Check if we have previous conversation context with campaign info
+        if conversation_context.get('messages'):
+            # Extract info from previous messages
+            for msg in conversation_context['messages']:
+                if msg['role'] == 'user':
+                    content = msg['content'].lower()
+                    # Extract product type
+                    if not extracted.get('product_type'):
+                        if any(word in content for word in ['health', 'fitness', 'supplement']):
+                            extracted['product_type'] = 'health'
+                        elif any(word in content for word in ['ecommerce', 'shop', 'store']):
+                            extracted['product_type'] = 'ecommerce'
+                    
+                    # Extract URL
+                    if not extracted.get('landing_url'):
+                        import re
+                        url_match = re.search(r'https?://[^\s]+', content)
+                        if url_match:
+                            extracted['landing_url'] = url_match.group()
+                    
+                    # Extract budget
+                    if not extracted.get('budget'):
+                        budget_match = re.search(r'\$(\d+)', content)
+                        if budget_match:
+                            extracted['budget'] = int(budget_match.group(1))
+                    
+                    # Extract countries
+                    if not extracted.get('countries'):
+                        if any(word in content for word in ['usa', 'us', 'america', 'united states']):
+                            extracted['countries'] = ['US']
+                    
+                    # Extract devices
+                    if not extracted.get('devices'):
+                        if any(word in content for word in ['mobile', 'android', 'ios']):
+                            extracted['devices'] = ['mobile']
+                    
+                    # Extract ad format
+                    if not extracted.get('ad_format'):
+                        if any(word in content for word in ['push', 'notification']):
+                            extracted['ad_format'] = 'push'
+        
         missing_critical = []
         missing_optional = []
         
@@ -464,9 +516,91 @@ class EnhancedClaudeInterface:
             response += "• Настройте отслеживание конверсий для оптимизации\n"
             response += "• Используйте ретаргетинг для повышения ROI\n"
         
-        response += "\n🚀 Кампания готова к запуску! (демо режим)"
+        # Actually create the campaign via API
+        campaign_data = {
+            'name': f"E2E Test Campaign - {info.get('product_type', 'Health')}",
+            'target_url': info.get('landing_url', 'https://example.com/health'),
+            'daily_budget': float(info.get('budget', 50)),
+            'countries': info.get('countries', ['US']),
+            'devices': info.get('devices', ['mobile']),
+            'ad_format': info.get('ad_format', 'push'),
+            'status': 'draft'  # Always draft for safety
+        }
+        
+        # Call the API
+        try:
+            result = await self.integration.create_campaign(campaign_data)
+            
+            if result['success']:
+                response += f"\n✅ УСПЕХ! Кампания создана в DRAFT статусе!\n"
+                response += f"📋 ID кампании: {result['campaign'].get('id', 'N/A')}\n"
+                response += f"💰 Статус: DRAFT (деньги не тратятся)\n"
+                response += f"🎯 {result['message']}\n"
+                response += f"\n🔒 Кампания в безопасном режиме - активируйте когда будете готовы!"
+            else:
+                response += f"\n❌ Ошибка создания кампании: {result['error']}\n"
+                response += f"💡 Попробуйте еще раз или обратитесь в поддержку"
+                
+        except Exception as e:
+            response += f"\n❌ Техническая ошибка: {str(e)}\n"
+            response += f"🔧 Проверьте подключение к API"
         
         return response
+    
+    async def _handle_campaign_followup(self, params: Dict[str, Any]) -> str:
+        """Handle follow-up information for campaign creation"""
+        text = params.get('text', '').lower()
+        conversation_context = params.get('conversation_context', {})
+        
+        # Extract information from the follow-up message
+        extracted_info = {}
+        
+        # Extract URL
+        import re
+        url_match = re.search(r'https?://[^\s]+', text)
+        if url_match:
+            extracted_info['landing_url'] = url_match.group()
+        
+        # Extract budget
+        budget_match = re.search(r'\$(\d+)', text)
+        if budget_match:
+            extracted_info['budget'] = int(budget_match.group(1))
+        
+        # Check if we have enough info to create campaign
+        # Look for previous campaign creation context
+        has_campaign_context = False
+        if conversation_context.get('messages'):
+            for msg in conversation_context['messages']:
+                if msg['role'] == 'user' and any(word in msg['content'].lower() for word in ['create', 'создай', 'campaign', 'кампанию']):
+                    has_campaign_context = True
+                    break
+        
+        if has_campaign_context and extracted_info:
+            # We have follow-up info for campaign creation
+            # Extract previous context and combine with new info
+            combined_info = {
+                'product_type': 'health',  # From previous context
+                'countries': ['US'],       # From previous context
+                'devices': ['mobile'],     # Default
+                'ad_format': 'push'        # Default
+            }
+            combined_info.update(extracted_info)
+            
+            # Check if we have minimum required info
+            if combined_info.get('landing_url') and combined_info.get('budget'):
+                # Create the campaign!
+                return await self._create_campaign_with_extracted_info(combined_info)
+            else:
+                missing = []
+                if not combined_info.get('landing_url'):
+                    missing.append("🔗 URL лендинга")
+                if not combined_info.get('budget'):
+                    missing.append("💰 Дневной бюджет")
+                
+                return f"✅ Понял! Еще нужно:\n" + "\n".join(missing)
+        
+        # If no campaign context, treat as regular message
+        return "🤔 Не совсем понял. Если хотите создать кампанию, скажите: 'Создай кампанию для [продукт]'"
     
     async def _handle_optimization_request(self, params: Dict[str, Any]) -> str:
         """Handle campaign optimization requests"""

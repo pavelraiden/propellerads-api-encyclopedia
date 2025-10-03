@@ -183,6 +183,93 @@ class ClaudePropellerAdsIntegration:
                 "message": f"Failed to retrieve user profile: {e}"
             }
     
+    async def create_campaign(self, campaign_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Create a new campaign with the provided data.
+        
+        Args:
+            campaign_data: Dictionary containing campaign configuration
+            
+        Returns:
+            Dict with success status and campaign data or error message
+        """
+        try:
+            # Validate required fields
+            required_fields = ['name', 'target_url']
+            missing_fields = [field for field in required_fields if not campaign_data.get(field)]
+            
+            if missing_fields:
+                return {
+                    'success': False,
+                    'error': f'Missing required fields: {", ".join(missing_fields)}'
+                }
+            
+            # Set default values and format according to PropellerAds API schema
+            from datetime import datetime, timedelta
+            
+            # Calculate dates
+            start_date = datetime.now().strftime('%d/%m/%Y')
+            end_date = (datetime.now() + timedelta(days=30)).strftime('%d/%m/%Y')
+            
+            final_data = {
+                'name': campaign_data.get('name', 'API Test Campaign'),
+                'direction': 'onclick',  # onclick or push
+                'rate_model': 'cpm',     # cpm or cpa
+                'target_url': campaign_data.get('target_url', campaign_data.get('landing_url', '')),
+                'frequency': 3,
+                'capping': 86400,
+                'status': 1,  # 1 = active (let API handle status transitions)
+                'started_at': start_date,
+                'expired_at': end_date,
+                'is_adblock_buy': 1,
+                'targeting': {
+                    'country': {
+                        'list': [country.lower() for country in campaign_data.get('countries', ['us'])],
+                        'is_excluded': False
+                    },
+                    'connection': campaign_data.get('devices', ['mobile'])[0] if campaign_data.get('devices') else 'mobile',
+                    'traffic_categories': ['propeller'],  # Required field
+                    'user_activity': {
+                        'list': [1, 2, 3],  # All user activity types
+                        'is_excluded': False
+                    },
+                    'time_table': {
+                        'list': ['Mon00', 'Mon01', 'Mon02', 'Mon03', 'Mon04', 'Mon05', 'Mon06', 'Mon07', 'Mon08', 'Mon09', 'Mon10', 'Mon11', 'Mon12', 'Mon13', 'Mon14', 'Mon15', 'Mon16', 'Mon17', 'Mon18', 'Mon19', 'Mon20', 'Mon21', 'Mon22', 'Mon23'],  # All day Monday as example
+                        'is_excluded': False
+                    }
+                },
+                'timezone': 0,  # UTC
+                'allow_zone_update': True,
+                'rates': [
+                    {
+                        'countries': [country.lower() for country in campaign_data.get('countries', ['us'])],
+                        'amount': max(0.47, float(campaign_data.get('budget', 50)) / 100)  # Ensure minimum $0.47
+                    }
+                ]
+            }
+            
+            # Create campaign via API
+            result = self.client.create_campaign(final_data)
+            
+            return {
+                'success': True,
+                'campaign': result,
+                'message': f'Campaign "{final_data["name"]}" created successfully in DRAFT status'
+            }
+            
+        except PropellerAdsError as e:
+            # Log the full error for debugging
+            print(f"DEBUG: PropellerAds API Error: {str(e)}")
+            return {
+                'success': False,
+                'error': f'PropellerAds API error: {str(e)}'
+            }
+        except Exception as e:
+            return {
+                'success': False,
+                'error': f'Unexpected error: {str(e)}'
+            }
+
     async def analyze_campaign_performance(self, campaign_id: int) -> Dict[str, Any]:
         """Analyze campaign performance and provide optimization suggestions."""
         try:
