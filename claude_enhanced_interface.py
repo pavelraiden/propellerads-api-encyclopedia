@@ -30,7 +30,7 @@ class EnhancedClaudeInterface:
     - Advanced targeting and creative management
     """
     
-    def __init__(self):
+    def __init__(self, api_service: Optional[PropellerAdsAPIService] = None):
         """Initialize the enhanced Claude interface"""
         # Initialize Anthropic client
         self.anthropic_client = AsyncAnthropic(
@@ -38,7 +38,7 @@ class EnhancedClaudeInterface:
         )
         
         # Initialize PropellerAds API service
-        self.api_service = PropellerAdsAPIService()
+        self.api_service = api_service or PropellerAdsAPIService()
         
         # Conversation history
         self.conversation_history = []
