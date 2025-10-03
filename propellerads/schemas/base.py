@@ -39,3 +39,23 @@ class IDMixin(BaseModel):
     """Mixin for models with ID fields"""
     
     id: Optional[int] = None
+
+
+
+class BaseResponse(PropellerBaseSchema):
+    """Base response class for API responses"""
+    
+    success: bool = True
+    message: Optional[str] = None
+    error: Optional[str] = None
+    data: Optional[Any] = None
+    
+    @property
+    def is_success(self) -> bool:
+        """Check if response is successful"""
+        return self.success and not self.error
+    
+    @property
+    def error_message(self) -> Optional[str]:
+        """Get error message if any"""
+        return self.error or (self.message if not self.success else None)

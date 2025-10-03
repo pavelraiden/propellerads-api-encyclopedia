@@ -1,6 +1,6 @@
 # 🚀 PropellerAds Python SDK - Enterprise Edition
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://python.org)
 [![Tests](https://img.shields.io/badge/Tests-185%20Passing-green.svg)](tests/)
 [![Claude](https://img.shields.io/badge/Claude-Integrated-purple.svg)](claude_propellerads_integration.py)
 [![Production](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](FINAL_CLAUDE_APPROVED_STATUS.md)
@@ -36,35 +36,36 @@
 
 Более подробную информацию о веб-интерфейсе можно найти в [документации по веб-интерфейсу](WEB_INTERFACE_DOCUMENTATION.md).
 
-## 🚀 Быстрый Запуск (Для Не-Разработчиков)
+## 🖱️ Быстрый Запуск (One-Click Setup)
 
-### Шаг 1: Скачать Проект
+### 1. 📥 Скачать и Установить
 ```bash
-# Скачиваем проект с GitHub
 git clone https://github.com/pavelraiden/propellerads-api-encyclopedia.git
 cd propellerads-api-encyclopedia
+python3 setup.py
 ```
 
-### Шаг 2: Автоматическая Установка
-```bash
-# Запускаем автоматическую установку (одна команда)
-./INSTALL.sh
+### 2. 🔑 Настроить API Ключи
+Отредактируйте файл `.env`:
+```env
+MainAPI=your_propellerads_api_key_here
+ANTHROPIC_API_KEY=your_claude_api_key_here
 ```
 
-### Шаг 3: Настроить API Ключ
-```bash
-# Добавляем ваш API ключ от PropellerAds
-export MainAPI="ваш-api-ключ-от-propellerads"
-```
+**Получить ключи:**
+- 🎯 PropellerAds: https://ssp.propellerads.com/
+- 🤖 Claude: https://console.anthropic.com/
 
-### Шаг 4: Запустить Веб-Интерфейс
-```bash
-# Запускаем веб-интерфейс с Claude AI
-cd web_interface
-python app.py
-```
+### 3. 🚀 Запустить Приложение
 
-**Откройте в браузере:** http://localhost:5000
+**Windows:** Двойной клик на `launch_app.bat`  
+**macOS/Linux:** Двойной клик на `launch_app.sh`  
+**Любая ОС:** `python3 launch_app.py`
+
+### 4. 🌐 Использовать
+- **Веб-интерфейс:** http://127.0.0.1:5000/
+- **AI Чат:** http://127.0.0.1:5000/chat
+- **API Документация:** http://127.0.0.1:5000/docs
 
 ### Альтернатива: Консольный Claude Помощник
 ```bash
