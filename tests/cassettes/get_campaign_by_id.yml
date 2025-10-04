@@ -1,0 +1,64 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate, br
+      Authorization:
+      - Bearer cf227d955e318199dd4d0a283b891ef2145e5d0c06bf7d36
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - PropellerAds-Python-SDK/1.0.0
+    method: GET
+    uri: https://ssp-api.propellerads.com/v5/adv/campaigns/9446595
+  response:
+    body:
+      string: '{"name":"[OnClick (Popunder)] [CPAG] 9446595","target_url":"https:\/\/healthnman.com\/topausaesandr.php?zoneid={zone_id}&campaignid={campaign_id}&language={language}&country={country}&browser={browser}&subzone={subzone_id}&osys={os}&conect={connection_type}&banid={banner_id}&medium={var10}_{zone_id}&cost={cost}&clickid=${SUBID}","started_at":"2025-05-18","direction_id":1,"rate_model":"scpa","capping":1,"limit_total_amount":null,"limit_daily_amount":150.0,"id":9446595,"frequency":1,"status":8,"is_archived":1}'
+    headers:
+      Cache-Control:
+      - no-cache, private
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Security-Policy:
+      - frame-ancestors 'none';
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 Oct 2025 19:32:23 GMT
+      Referrer-Policy:
+      - no-referrer
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - master-only
+      X-RateLimit-Limit:
+      - '150'
+      X-RateLimit-Remaining:
+      - '149'
+      X-RateLimit-Reset:
+      - '1759606403'
+      X-Request-Id:
+      - 353996c1bd8e50518e9633ded6b787c7
+      X-User-Id:
+      - '3781441'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

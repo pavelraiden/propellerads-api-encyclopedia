@@ -1037,3 +1037,18 @@ class PropellerAdsClient:
         response = self._make_request("PUT", f"/adv/campaigns/{campaign_id}/zones", json=zones_data)
         return response.json()
 
+
+
+    def get_campaign_by_id(self, campaign_id: int) -> Dict[str, Any]:
+        """
+        Get full info by campaign.
+
+        Args:
+            campaign_id: Numeric ID of the campaign.
+
+        Returns:
+            Dict: Full campaign information.
+        """
+        endpoint = f"/adv/campaigns/{campaign_id}"
+        response = self._make_request("GET", endpoint)
+        return response.json()
